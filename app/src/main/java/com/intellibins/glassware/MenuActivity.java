@@ -1,12 +1,10 @@
 package com.intellibins.glassware;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
 
 import com.google.android.glass.view.WindowUtils;
 import com.google.android.glass.widget.CardBuilder;
@@ -26,6 +24,7 @@ public class MenuActivity extends BaseGlassActivity {
 
         mTuggableView = new TuggableView(this, mView);
 
+        getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         setContentView(mTuggableView);
     }
 
@@ -70,10 +69,8 @@ public class MenuActivity extends BaseGlassActivity {
                 featureId == Window.FEATURE_OPTIONS_PANEL) {
             switch (item.getItemId()) {
                 case R.id.plastic_menu_item:
-                    Toast.makeText(this, "Plastic", Toast.LENGTH_LONG).show();
                     break;
                 case R.id.paper_menu_item:
-                    Toast.makeText(this, "Paper", Toast.LENGTH_LONG).show();
                     break;
                 default:
                     return true;
@@ -85,7 +82,6 @@ public class MenuActivity extends BaseGlassActivity {
 
     @Override
     protected boolean onTap() {
-        Log.v("MenuActivity", "onTap");
         openOptionsMenu();
         return true;
     }
