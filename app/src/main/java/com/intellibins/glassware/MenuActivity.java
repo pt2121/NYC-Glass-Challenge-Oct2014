@@ -24,6 +24,7 @@ public class MenuActivity extends BaseGlassActivity {
 
         mTuggableView = new TuggableView(this, mView);
 
+        getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         setContentView(mTuggableView);
     }
 
