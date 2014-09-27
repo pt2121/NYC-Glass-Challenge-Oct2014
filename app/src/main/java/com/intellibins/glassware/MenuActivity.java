@@ -70,10 +70,8 @@ public class MenuActivity extends BaseGlassActivity {
                 featureId == Window.FEATURE_OPTIONS_PANEL) {
             switch (item.getItemId()) {
                 case R.id.plastic_menu_item:
-                    Toast.makeText(this, "Plastic", Toast.LENGTH_LONG).show();
                     break;
                 case R.id.paper_menu_item:
-                    Toast.makeText(this, "Paper", Toast.LENGTH_LONG).show();
                     break;
                 default:
                     return true;
@@ -85,7 +83,6 @@ public class MenuActivity extends BaseGlassActivity {
 
     @Override
     protected boolean onTap() {
-        Log.v("MenuActivity", "onTap");
         openOptionsMenu();
         return true;
     }
