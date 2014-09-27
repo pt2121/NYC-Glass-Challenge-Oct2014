@@ -50,7 +50,9 @@ public class TuggableView extends CardScrollView {
         return false;
     }
 
-    /** Holds the single "card" inside the card scroll view. */
+    /**
+     * Holds the single "card" inside the card scroll view.
+     */
     private class SingleCardAdapter extends CardScrollAdapter {
 
         @Override
