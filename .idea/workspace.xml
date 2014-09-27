@@ -47,11 +47,10 @@
       <file leaf-file-name="MenuActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/intellibins/glassware/MenuActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8584906" vertical-offset="746" max-vertical-offset="1440">
-              <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.2476415" vertical-offset="0" max-vertical-offset="1410">
+              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1081#1101#0" expanded="true" />
+                <element signature="e#1027#1047#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1178,11 +1177,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/intellibins/glassware/MenuActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8584906" vertical-offset="746" max-vertical-offset="1440">
-          <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.2476415" vertical-offset="0" max-vertical-offset="1410">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1081#1101#0" expanded="true" />
+            <element signature="e#1027#1047#0" expanded="true" />
           </folding>
         </state>
       </provider>
