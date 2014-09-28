@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by prt2121 on 9/27/14.
  */
-public class NycBinLocation {
+public class NycBinLocation implements IBinLocation {
 
     private static final String TAG = NycBinLocation.class.getSimpleName();
 
@@ -70,15 +70,18 @@ public class NycBinLocation {
         return bins;
     }
 
+    @Override
     public List<Bin> getBins() {
         return makeBins(parseJson(getJsonText(mApp.getApplicationContext())));
     }
 
+    @Override
     public List<Bin> getClosestBin(final double myLatitude,
             final double myLongitude) {
         return null;
     }
 
+    @Override
     public List<Bin> getClosestBin(double myLatitude, double myLongitude,
             int num) {
         return null;
