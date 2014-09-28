@@ -1,16 +1,18 @@
+package com.intellibins.glassware.model.nyc;
 
-package com.intellibins.glassware.model;
+import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.google.gson.annotations.Expose;
 
 public class Grant {
 
     @Expose
     private Boolean inherited;
+
     @Expose
     private String type;
+
     @Expose
     private List<String> flags = new ArrayList<String>();
 

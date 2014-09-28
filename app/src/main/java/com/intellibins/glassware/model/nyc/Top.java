@@ -1,5 +1,4 @@
-
-package com.intellibins.glassware.model;
+package com.intellibins.glassware.model.nyc;
 
 import com.google.gson.annotations.Expose;
 
@@ -7,6 +6,7 @@ public class Top {
 
     @Expose
     private Integer count;
+
     @Expose
     private String item;
 

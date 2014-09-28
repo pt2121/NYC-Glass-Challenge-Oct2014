@@ -1,4 +1,4 @@
-package com.intellibins.glassware.model;
+package com.intellibins.glassware.model.nyc;
 
 import com.google.gson.annotations.Expose;
 
@@ -12,8 +12,9 @@ public class BinData {
 
     @Expose
     private Meta meta;
+
     @Expose
-    private List<List<String>> data = new ArrayList<List<String>>();
+    private List<List<String>> data = new ArrayList<>();
 
     public Meta getMeta() {
         return meta;

@@ -1,27 +1,33 @@
+package com.intellibins.glassware.model.nyc;
 
-package com.intellibins.glassware.model;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 public class CachedContents {
 
     @SerializedName("non_null")
     @Expose
     private Integer nonNull;
+
     @Expose
     private String smallest;
+
     @Expose
     private String sum;
+
     @SerializedName("null")
     @Expose
     private Integer _null;
+
     @Expose
     private String average;
+
     @Expose
     private String largest;
+
     @Expose
     private List<Top> top = new ArrayList<Top>();
 
