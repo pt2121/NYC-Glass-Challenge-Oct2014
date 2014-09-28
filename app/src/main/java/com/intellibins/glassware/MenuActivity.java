@@ -17,6 +17,7 @@ import android.view.Window;
 import javax.inject.Inject;
 
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class MenuActivity extends BaseGlassActivity {
 
@@ -42,6 +43,7 @@ public class MenuActivity extends BaseGlassActivity {
         setContentView(mTuggableView);
 
         mBinLocation.getBins()
+                .subscribeOn(Schedulers.newThread())
                 .subscribe(new Action1<Bin>() {
                     @Override
                     public void call(Bin bin) {
