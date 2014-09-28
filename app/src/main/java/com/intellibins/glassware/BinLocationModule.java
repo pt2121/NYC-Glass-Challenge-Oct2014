@@ -24,17 +24,8 @@ public class BinLocationModule {
     }
 
     @Provides
-    public NycBinLocation provideNycBinLocation() {
+    public IBinLocation provideNycBinLocation() {
         return new NycBinLocation(mApp);
     }
 
-//    @Provides
-//    public List<Bin> provideClosestBin(final double myLatitude, final double myLongitude) {
-//        return null;
-//    }
-//
-//    @Provides
-//    public List<Bin> provideClosestBin(final double myLatitude, final double myLongitude, int num) {
-//        return null;
-//    }
 }

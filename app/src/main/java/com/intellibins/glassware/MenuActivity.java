@@ -26,7 +26,7 @@ public class MenuActivity extends BaseGlassActivity {
     private View mView;
 
     @Inject
-    NycBinLocation mNycBinLocation;
+    IBinLocation mBinLocation;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -42,7 +42,7 @@ public class MenuActivity extends BaseGlassActivity {
         getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         setContentView(mTuggableView);
 
-        List<Bin> bins = mNycBinLocation.getBins();
+        List<Bin> bins = mBinLocation.getBins();
         for(Bin bin : bins) {
             Log.v(TAG, "bin " + bin.name);
         }
