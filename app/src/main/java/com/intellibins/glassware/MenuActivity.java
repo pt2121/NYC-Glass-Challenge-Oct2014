@@ -42,10 +42,6 @@ public class MenuActivity extends BaseGlassActivity {
         getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         setContentView(mTuggableView);
 
-        List<Bin> bins = mBinLocation.getBins();
-        for(Bin bin : bins) {
-            Log.v(TAG, "bin " + bin.name);
-        }
     }
 
     @Override
