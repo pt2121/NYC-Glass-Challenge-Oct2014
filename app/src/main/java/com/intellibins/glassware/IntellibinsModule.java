@@ -1,5 +1,7 @@
 package com.intellibins.glassware;
 
+import com.intellibins.glassware.binlocation.BinLocationModule;
+
 import android.app.Application;
 
 import javax.inject.Singleton;
@@ -14,8 +16,10 @@ import dagger.Provides;
         includes = {
                 BinLocationModule.class
         },
-        injects = IntellibinsApp.class,
-        library = true
+        injects = {
+                IntellibinsApp.class,
+                BinLocationModule.class
+        }
 )
 public class IntellibinsModule {
 

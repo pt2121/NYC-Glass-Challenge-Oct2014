@@ -1,4 +1,6 @@
-package com.intellibins.glassware;
+package com.intellibins.glassware.binlocation;
+
+import com.intellibins.glassware.MenuActivity;
 
 import android.app.Application;
 
