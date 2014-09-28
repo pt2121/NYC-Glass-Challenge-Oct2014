@@ -10,12 +10,14 @@ import com.intellibins.glassware.model.nyc.BinData;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
-import android.location.Location;
 import android.util.Log;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Func1;
 
 /**
  * Created by prt2121 on 9/27/14.
@@ -24,56 +26,75 @@ public class NycBinLocation implements IBinLocation {
 
     private static final String TAG = NycBinLocation.class.getSimpleName();
 
-    private static BinData mBinData;
-
-    private List<Location> mSortedBinLocations;
-
     private Application mApp;
 
     public NycBinLocation(Application app) {
         mApp = app;
     }
 
-    private static BinData parseJson(String jsonText) {
+    private BinData parseJson(String jsonText) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.fromJson(jsonText, BinData.class);
     }
 
-    private static String getJsonText(Context context) {
+    private Observable<String> getJsonText(Context context) {
         try {
             Resources res = context.getResources();
             InputStream inputStream = res.openRawResource(R.raw.json);
             byte[] b = new byte[inputStream.available()];
             int bytes = inputStream.read(b);
-            return bytes == -1 ? null : new String(b);
+            return bytes == -1 ? Observable.<String>empty()
+                    : Observable.just(new String(b));
         } catch (Exception e) {
-            return null;
+            return Observable.empty();
         }
     }
 
-    private static List<Bin> makeBins(BinData binData) {
-        List<List<String>> lists = binData.getData();
-        List<Bin> bins = new ArrayList<>();
-        for (List<String> strings : lists) {
-            try {
-                int len = strings.size();
-                Bin bin = new Bin.Builder(strings.get(len - 4))
-                        .address(strings.get(len - 3))
-                        .latitude(Double.parseDouble(strings.get(len - 2)))
-                        .longitude(Double.parseDouble(strings.get(len - 1)))
-                        .build();
-                bins.add(bin);
-            } catch (Exception ex) {
-                Log.e(TAG, "#makeBins " + strings.toString());
-                Log.e(TAG, ex.toString());
+    private Observable<Bin> makeBins(final BinData binData) {
+        return Observable.create(new Observable.OnSubscribe<Bin>() {
+            @Override
+            public void call(final Subscriber<? super Bin> subscriber) {
+                final Thread t = new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        List<List<String>> lists = binData.getData();
+                        for (List<String> strings : lists) {
+                            try {
+                                int len = strings.size();
+                                Bin bin = new Bin.Builder(strings.get(len - 4))
+                                        .address(strings.get(len - 3))
+                                        .latitude(Double.parseDouble(strings.get(len - 2)))
+                                        .longitude(Double.parseDouble(strings.get(len - 1)))
+                                        .build();
+                                subscriber.onNext(bin);
+                            } catch (Exception ex) {
+                                Log.e(TAG, "#makeBins " + strings.toString());
+                                Log.e(TAG, ex.toString());
+                            }
+                        }
+                        subscriber.onCompleted();
+                    }
+                });
+                t.start();
             }
-        }
-        return bins;
+        });
     }
 
     @Override
-    public List<Bin> getBins() {
-        return makeBins(parseJson(getJsonText(mApp.getApplicationContext())));
+    public Observable<Bin> getBins() {
+        return getJsonText(mApp.getApplicationContext())
+                .map(new Func1<String, BinData>() {
+                    @Override
+                    public BinData call(String jsonString) {
+                        return parseJson(jsonString);
+                    }
+                }).flatMap(new Func1<BinData, Observable<Bin>>() {
+                    @Override
+                    public Observable<Bin> call(BinData binData) {
+                        return makeBins(binData);
+                    }
+                });
     }
 
 }
