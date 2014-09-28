@@ -1,9 +1,9 @@
 package com.intellibins.glassware;
 
+import com.intellibins.glassware.binlocation.BinLocationModule;
+
 import android.app.Application;
 import android.content.Context;
-
-import java.util.Arrays;
 
 import dagger.ObjectGraph;
 

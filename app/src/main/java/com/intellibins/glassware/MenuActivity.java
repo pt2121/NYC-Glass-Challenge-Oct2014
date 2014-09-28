@@ -3,6 +3,7 @@ package com.intellibins.glassware;
 import com.google.android.glass.view.WindowUtils;
 import com.google.android.glass.widget.CardBuilder;
 
+import com.intellibins.glassware.binlocation.IBinLocation;
 import com.intellibins.glassware.model.Bin;
 import com.intellibins.glassware.view.TuggableView;
 
@@ -19,14 +20,12 @@ import javax.inject.Inject;
 
 public class MenuActivity extends BaseGlassActivity {
 
-    private static final String TAG = MenuActivity.class.getSimpleName();
+    @Inject
+    IBinLocation mBinLocation;
 
     private TuggableView mTuggableView;
 
     private View mView;
-
-    @Inject
-    IBinLocation mBinLocation;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -41,6 +40,12 @@ public class MenuActivity extends BaseGlassActivity {
 
         getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         setContentView(mTuggableView);
+
+        List<Bin> bins = mBinLocation.getBins();
+        Utils.sortBins(bins, 40.742994, -73.984030);
+        for (Bin bin : bins) {
+            Log.v(MenuActivity.class.getSimpleName(), "bin " + bin.name);
+        }
 
     }
 

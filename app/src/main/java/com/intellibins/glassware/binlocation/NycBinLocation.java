@@ -1,8 +1,9 @@
-package com.intellibins.glassware;
+package com.intellibins.glassware.binlocation;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import com.intellibins.glassware.R;
 import com.intellibins.glassware.model.Bin;
 import com.intellibins.glassware.model.nyc.BinData;
 
@@ -73,18 +74,6 @@ public class NycBinLocation implements IBinLocation {
     @Override
     public List<Bin> getBins() {
         return makeBins(parseJson(getJsonText(mApp.getApplicationContext())));
-    }
-
-    @Override
-    public List<Bin> getClosestBin(final double myLatitude,
-            final double myLongitude) {
-        return null;
-    }
-
-    @Override
-    public List<Bin> getClosestBin(double myLatitude, double myLongitude,
-            int num) {
-        return null;
     }
 
 }
