@@ -1,76 +1,108 @@
+package com.intellibins.glassware.model.nyc;
 
-package com.intellibins.glassware.model;
+import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.google.gson.annotations.Expose;
 
 public class View {
 
     @Expose
     private String id;
+
     @Expose
     private String name;
+
     @Expose
     private String attribution;
+
     @Expose
     private Integer averageRating;
+
     @Expose
     private String category;
+
     @Expose
     private Integer createdAt;
+
     @Expose
     private String description;
+
     @Expose
     private String displayType;
+
     @Expose
     private Integer downloadCount;
+
     @Expose
     private Integer indexUpdatedAt;
+
     @Expose
     private Boolean newBackend;
+
     @Expose
     private Integer numberOfComments;
+
     @Expose
     private Integer oid;
+
     @Expose
     private Boolean publicationAppendEnabled;
+
     @Expose
     private Integer publicationDate;
+
     @Expose
     private Integer publicationGroup;
+
     @Expose
     private String publicationStage;
+
     @Expose
     private Integer rowsUpdatedAt;
+
     @Expose
     private String rowsUpdatedBy;
+
     @Expose
     private Integer tableId;
+
     @Expose
     private Integer totalTimesRated;
+
     @Expose
     private Integer viewCount;
+
     @Expose
     private Integer viewLastModified;
+
     @Expose
     private String viewType;
+
     @Expose
     private List<Column> columns = new ArrayList<Column>();
+
     @Expose
     private List<Grant> grants = new ArrayList<Grant>();
+
     @Expose
     private Metadata metadata;
+
     @Expose
     private Owner owner;
+
     @Expose
     private Query query;
+
     @Expose
     private List<String> rights = new ArrayList<String>();
+
     @Expose
     private TableAuthor tableAuthor;
+
     @Expose
     private List<String> tags = new ArrayList<String>();
+
     @Expose
     private List<String> flags = new ArrayList<String>();
 

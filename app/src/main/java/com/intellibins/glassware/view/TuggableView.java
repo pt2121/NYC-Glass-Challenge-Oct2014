@@ -1,13 +1,13 @@
 package com.intellibins.glassware.view;
 
+import com.google.android.glass.widget.CardScrollAdapter;
+import com.google.android.glass.widget.CardScrollView;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.glass.widget.CardScrollAdapter;
-import com.google.android.glass.widget.CardScrollView;
 
 /**
  * Created by prt2121 on 9/27/14.
@@ -72,7 +72,7 @@ public class TuggableView extends CardScrollView {
 
         @Override
         public View getView(int position, View recycleView,
-                            ViewGroup parent) {
+                ViewGroup parent) {
             return mContentView;
         }
     }

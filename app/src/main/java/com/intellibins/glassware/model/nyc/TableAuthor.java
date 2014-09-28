@@ -1,20 +1,24 @@
+package com.intellibins.glassware.model.nyc;
 
-package com.intellibins.glassware.model;
+import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.google.gson.annotations.Expose;
 
 public class TableAuthor {
 
     @Expose
     private String id;
+
     @Expose
     private String displayName;
+
     @Expose
     private String roleName;
+
     @Expose
     private String screenName;
+
     @Expose
     private List<String> rights = new ArrayList<String>();
 

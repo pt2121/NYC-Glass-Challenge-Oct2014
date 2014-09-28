@@ -1,5 +1,4 @@
-
-package com.intellibins.glassware.model;
+package com.intellibins.glassware.model.nyc;
 
 import com.google.gson.annotations.Expose;
 
@@ -7,22 +6,31 @@ public class Column {
 
     @Expose
     private Integer id;
+
     @Expose
     private String name;
+
     @Expose
     private String dataTypeName;
+
     @Expose
     private String fieldName;
+
     @Expose
     private Integer position;
+
     @Expose
     private String renderTypeName;
+
     @Expose
     private Format format;
+
     @Expose
     private Integer tableColumnId;
+
     @Expose
     private Integer width;
+
     @Expose
     private CachedContents cachedContents;
 

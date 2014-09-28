@@ -1,5 +1,4 @@
-
-package com.intellibins.glassware.model;
+package com.intellibins.glassware.model.nyc;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,6 +8,7 @@ public class CustomFields {
     @SerializedName("Update")
     @Expose
     private Update update;
+
     @SerializedName("Dataset Information")
     @Expose
     private DatasetInformation datasetInformation;

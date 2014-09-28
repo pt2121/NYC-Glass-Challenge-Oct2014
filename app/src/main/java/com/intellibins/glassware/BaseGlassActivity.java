@@ -1,13 +1,13 @@
 package com.intellibins.glassware;
 
+import com.google.android.glass.touchpad.Gesture;
+import com.google.android.glass.touchpad.GestureDetector;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
-
-import com.google.android.glass.touchpad.Gesture;
-import com.google.android.glass.touchpad.GestureDetector;
 
 /**
  * Created by prt2121 on 9/27/14.
@@ -15,6 +15,7 @@ import com.google.android.glass.touchpad.GestureDetector;
 public class BaseGlassActivity extends Activity {
 
     private static final String TAG = BaseGlassActivity.class.getSimpleName();
+
     private GestureDetector mGestureDetector;
 
     @Override

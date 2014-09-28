@@ -1,24 +1,39 @@
 package com.intellibins.glassware;
 
+import com.google.android.glass.view.WindowUtils;
+import com.google.android.glass.widget.CardBuilder;
+
+import com.intellibins.glassware.model.Bin;
+import com.intellibins.glassware.view.TuggableView;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
-import com.google.android.glass.view.WindowUtils;
-import com.google.android.glass.widget.CardBuilder;
-import com.intellibins.glassware.view.TuggableView;
+import java.util.List;
+
+import javax.inject.Inject;
 
 public class MenuActivity extends BaseGlassActivity {
+
+    private static final String TAG = MenuActivity.class.getSimpleName();
 
     private TuggableView mTuggableView;
 
     private View mView;
 
+    @Inject
+    NycBinLocation mNycBinLocation;
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+
+        IntellibinsApp app = IntellibinsApp.get(this);
+        app.inject(this);
 
         mView = buildView();
 
@@ -26,6 +41,11 @@ public class MenuActivity extends BaseGlassActivity {
 
         getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         setContentView(mTuggableView);
+
+        List<Bin> bins = mNycBinLocation.getBins();
+        for(Bin bin : bins) {
+            Log.v(TAG, "bin " + bin.name);
+        }
     }
 
     @Override

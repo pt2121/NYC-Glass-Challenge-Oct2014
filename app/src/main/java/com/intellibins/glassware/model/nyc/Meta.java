@@ -1,5 +1,4 @@
-
-package com.intellibins.glassware.model;
+package com.intellibins.glassware.model.nyc;
 
 import com.google.gson.annotations.Expose;
 
