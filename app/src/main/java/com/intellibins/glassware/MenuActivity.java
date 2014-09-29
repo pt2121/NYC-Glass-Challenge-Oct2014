@@ -3,6 +3,7 @@ package com.intellibins.glassware;
 import com.google.android.glass.view.WindowUtils;
 import com.google.android.glass.widget.CardBuilder;
 
+import com.intellibins.glassware.binlocation.BinLocationUtils;
 import com.intellibins.glassware.binlocation.IBinLocation;
 import com.intellibins.glassware.model.Bin;
 import com.intellibins.glassware.view.TuggableView;
@@ -14,9 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 public class MenuActivity extends BaseGlassActivity {
@@ -43,18 +49,17 @@ public class MenuActivity extends BaseGlassActivity {
         setContentView(mTuggableView);
 
         mBinLocation.getBins()
+                .toSortedList(new BinLocationUtils().compare(40.742994, -73.984030))
                 .subscribeOn(Schedulers.newThread())
-                .subscribe(new Action1<Bin>() {
+                .subscribe(new Action1<List<Bin>>() {
                     @Override
-                    public void call(Bin bin) {
-                        Log.v(MenuActivity.class.getSimpleName(), "bin address " + bin.address);
+                    public void call(List<Bin> bins) {
+                        for (Bin bin : bins) {
+                            Log.v(MenuActivity.class.getSimpleName(), "bin " + bin.name);
+                            Log.v(MenuActivity.class.getSimpleName(), "address " + bin.address);
+                        }
                     }
                 });
-//        Utils.sortBins(bins, 40.742994, -73.984030);
-//        for (Bin bin : bins) {
-//            Log.v(MenuActivity.class.getSimpleName(), "bin " + bin.name);
-//        }
-
     }
 
     @Override
