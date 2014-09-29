@@ -47,7 +47,7 @@ public class MenuActivity extends BaseGlassActivity {
                 .subscribe(new Action1<Bin>() {
                     @Override
                     public void call(Bin bin) {
-                        Log.v(MenuActivity.class.getSimpleName(), "bin " + bin.name);
+                        Log.v(MenuActivity.class.getSimpleName(), "bin address " + bin.address);
                     }
                 });
 //        Utils.sortBins(bins, 40.742994, -73.984030);
