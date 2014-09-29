@@ -43,13 +43,13 @@ class NycBinLocation implements IBinLocation {
             Subscriber<Bin> subscriber ->
                 Thread.start({
                     List<List<String>> lists = binData.getData()
-                    for (List<String> strings : lists) {
+                    lists.each { ls ->
                         try {
-                            int len = strings.size()
-                            Bin bin = new Bin.Builder(strings.get(len - 4))
-                                    .address(strings.get(len - 3))
-                                    .latitude(Double.parseDouble(strings.get(len - 2)))
-                                    .longitude(Double.parseDouble(strings.get(len - 1)))
+                            int len = ls.size()
+                            Bin bin = new Bin.Builder(ls.get(len - 4))
+                                    .address(ls.get(len - 3))
+                                    .latitude(Double.parseDouble(ls.get(len - 2)))
+                                    .longitude(Double.parseDouble(ls.get(len - 1)))
                                     .build()
                             subscriber.onNext(bin)
                         } catch (Exception ex) {
