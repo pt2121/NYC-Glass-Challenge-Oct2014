@@ -60,6 +60,19 @@ public class MenuActivity extends BaseGlassActivity {
                         }
                     }
                 });
+
+//        mBinLocation.getBins()
+//                .toSortedList(new BinLocationUtils().compare(40.742994, -73.984030))
+//                .subscribeOn(Schedulers.newThread())
+//                .subscribe(new Action1<List<Bin>>() {
+//                    @Override
+//                    public void call(List<Bin> bins) {
+//                        for (Bin bin : bins) {
+//                            Log.v(MenuActivity.class.getSimpleName(), "bin " + bin.name);
+//                            Log.v(MenuActivity.class.getSimpleName(), "address " + bin.address);
+//                        }
+//                    }
+//                });
     }
 
     @Override
