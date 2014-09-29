@@ -22,13 +22,13 @@ import rx.functions.Func1;
 /**
  * Created by prt2121 on 9/27/14.
  */
-public class NycBinLocation implements IBinLocation {
+public class NycBinLocation_java implements IBinLocation {
 
-    private static final String TAG = NycBinLocation.class.getSimpleName();
+    private static final String TAG = NycBinLocation_java.class.getSimpleName();
 
     private Application mApp;
 
-    public NycBinLocation(Application app) {
+    public NycBinLocation_java(Application app) {
         mApp = app;
     }
 

@@ -12,11 +12,11 @@ import com.intellibins.glassware.model.nyc.BinData
 import rx.Observable
 import rx.Subscriber
 
-class NewYorkCityBinLocation implements IBinLocation {
+class NycBinLocation implements IBinLocation {
 
     private Application mApp
 
-    NewYorkCityBinLocation(Application app) {
+    NycBinLocation(Application app) {
         mApp = app
     }
 
@@ -47,7 +47,7 @@ class NewYorkCityBinLocation implements IBinLocation {
 
                     @Override
                     public void run() {
-                        List<List<String>> lists = binData.getData();
+                        List<List<String>> lists = binData.getData()
                         for (List<String> strings : lists) {
                             try {
                                 int len = strings.size()
@@ -58,7 +58,7 @@ class NewYorkCityBinLocation implements IBinLocation {
                                         .build()
                                 subscriber.onNext(bin)
                             } catch (Exception ex) {
-                                Log.e(NewYorkCityBinLocation.getSimpleName(), ex.toString())
+                                Log.e(NycBinLocation.getSimpleName(), ex.toString())
                             }
                         }
                         subscriber.onCompleted()
@@ -85,7 +85,7 @@ class NewYorkCityBinLocation implements IBinLocation {
                                         .build()
                                 subscriber.onNext(bin)
                             } catch (Exception ex) {
-                                Log.e(NewYorkCityBinLocation.getSimpleName(), ex.toString())
+                                Log.e(NycBinLocation.getSimpleName(), ex.toString())
                             }
                         }
                         subscriber.onCompleted()
