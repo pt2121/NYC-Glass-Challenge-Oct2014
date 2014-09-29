@@ -14,9 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
-import java.util.List;
-
 import javax.inject.Inject;
+
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class MenuActivity extends BaseGlassActivity {
 
@@ -41,11 +42,18 @@ public class MenuActivity extends BaseGlassActivity {
         getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         setContentView(mTuggableView);
 
-        List<Bin> bins = mBinLocation.getBins();
-        Utils.sortBins(bins, 40.742994, -73.984030);
-        for (Bin bin : bins) {
-            Log.v(MenuActivity.class.getSimpleName(), "bin " + bin.name);
-        }
+        mBinLocation.getBins()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new Action1<Bin>() {
+                    @Override
+                    public void call(Bin bin) {
+                        Log.v(MenuActivity.class.getSimpleName(), "bin address " + bin.address);
+                    }
+                });
+//        Utils.sortBins(bins, 40.742994, -73.984030);
+//        for (Bin bin : bins) {
+//            Log.v(MenuActivity.class.getSimpleName(), "bin " + bin.name);
+//        }
 
     }
 
