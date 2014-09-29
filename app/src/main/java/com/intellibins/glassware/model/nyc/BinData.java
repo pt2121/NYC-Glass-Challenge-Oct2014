@@ -14,7 +14,7 @@ public class BinData {
     private Meta meta;
 
     @Expose
-    private List<List<String>> data = new ArrayList<>();
+    private List<List<String>> data = new ArrayList<List<String>>();
 
     public Meta getMeta() {
         return meta;

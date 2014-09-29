@@ -26,8 +26,6 @@ public class BinLocationModule {
     }
 
     @Provides
-    public IBinLocation provideNycBinLocation() {
-        return new NycBinLocation(mApp);
-    }
+    public IBinLocation provideNycBinLocation() { return new NycBinLocation(mApp); }
 
 }
