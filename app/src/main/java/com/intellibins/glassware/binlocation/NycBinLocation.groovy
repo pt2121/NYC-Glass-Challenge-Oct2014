@@ -67,31 +67,6 @@ class NycBinLocation implements IBinLocation {
                 t.start()
             }
         })
-
-        Observable.create({
-            Subscriber<Bin> subscriber ->
-                new Thread(new Runnable() {
-
-                    @Override
-                    void run() {
-                        List<List<String>> lists = binData.getData()
-                        for (List<String> strings : lists) {
-                            try {
-                                int len = strings.size()
-                                Bin bin = new Bin.Builder(strings.get(len - 4))
-                                        .address(strings.get(len - 3))
-                                        .latitude(Double.parseDouble(strings.get(len - 2)))
-                                        .longitude(Double.parseDouble(strings.get(len - 1)))
-                                        .build()
-                                subscriber.onNext(bin)
-                            } catch (Exception ex) {
-                                Log.e(NycBinLocation.getSimpleName(), ex.toString())
-                            }
-                        }
-                        subscriber.onCompleted()
-                    }
-                }).start()
-        })
     }
 
     @Override
