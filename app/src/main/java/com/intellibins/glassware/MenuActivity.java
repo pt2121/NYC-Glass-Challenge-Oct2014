@@ -23,6 +23,7 @@ import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
+import rx.functions.Functions;
 import rx.schedulers.Schedulers;
 
 public class MenuActivity extends BaseGlassActivity {
@@ -50,29 +51,21 @@ public class MenuActivity extends BaseGlassActivity {
 
         mBinLocation.getBins()
                 .toSortedList(new BinLocationUtils().compare(40.742994, -73.984030))
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(new Action1<List<Bin>>() {
+                .flatMap(new Func1<List<Bin>, Observable<Bin>>() {
                     @Override
-                    public void call(List<Bin> bins) {
-                        for (Bin bin : bins) {
-                            Log.v(MenuActivity.class.getSimpleName(), "bin " + bin.name);
-                            Log.v(MenuActivity.class.getSimpleName(), "address " + bin.address);
-                        }
+                    public Observable<Bin> call(List<Bin> bins) {
+                        return Observable.from(bins);
+                    }
+                })
+                .take(5)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new Action1<Bin>() {
+                    @Override
+                    public void call(Bin bin) {
+                        Log.v(MenuActivity.class.getSimpleName(), "bin " + bin.name);
+                        Log.v(MenuActivity.class.getSimpleName(), "address " + bin.address);
                     }
                 });
-
-//        mBinLocation.getBins()
-//                .toSortedList(new BinLocationUtils().compare(40.742994, -73.984030))
-//                .subscribeOn(Schedulers.newThread())
-//                .subscribe(new Action1<List<Bin>>() {
-//                    @Override
-//                    public void call(List<Bin> bins) {
-//                        for (Bin bin : bins) {
-//                            Log.v(MenuActivity.class.getSimpleName(), "bin " + bin.name);
-//                            Log.v(MenuActivity.class.getSimpleName(), "address " + bin.address);
-//                        }
-//                    }
-//                });
     }
 
     @Override
