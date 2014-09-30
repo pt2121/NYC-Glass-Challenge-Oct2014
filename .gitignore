@@ -27,3 +27,6 @@ proguard/
 
 # Mac OS X clutter
 *.DS_Store
+
+# intellij
+.idea/

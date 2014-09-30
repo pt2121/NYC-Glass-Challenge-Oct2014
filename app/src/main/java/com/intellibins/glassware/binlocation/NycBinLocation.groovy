@@ -39,40 +39,32 @@ class NycBinLocation implements IBinLocation {
     }
 
     private Observable<Bin> makeBins(final BinData binData) {
-        Observable.create(new Observable.OnSubscribe<Bin>() {
-
-            @Override
-            public void call(final Subscriber<? super Bin> subscriber) {
-                final Thread t = new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        List<List<String>> lists = binData.getData()
-                        for (List<String> strings : lists) {
-                            try {
-                                int len = strings.size()
-                                Bin bin = new Bin.Builder(strings.get(len - 4))
-                                        .address(strings.get(len - 3))
-                                        .latitude(Double.parseDouble(strings.get(len - 2)))
-                                        .longitude(Double.parseDouble(strings.get(len - 1)))
-                                        .build()
-                                subscriber.onNext(bin)
-                            } catch (Exception ex) {
-                                Log.e(NycBinLocation.getSimpleName(), ex.toString())
-                            }
+        Observable.create({
+            Subscriber<Bin> subscriber ->
+                Thread.start({
+                    List<List<String>> lists = binData.getData()
+                    lists.each { ls ->
+                        try {
+                            int len = ls.size()
+                            Bin bin = new Bin.Builder(ls.get(len - 4))
+                                    .address(ls.get(len - 3))
+                                    .latitude(Double.parseDouble(ls.get(len - 2)))
+                                    .longitude(Double.parseDouble(ls.get(len - 1)))
+                                    .build()
+                            subscriber.onNext(bin)
+                        } catch (Exception ex) {
+                            Log.e(NycBinLocation.getSimpleName(), ex.toString())
                         }
-                        subscriber.onCompleted()
                     }
+                    subscriber.onCompleted()
                 })
-                t.start()
-            }
-        })
+        } as Observable.OnSubscribe<Bin>)
     }
 
     @Override
     Observable<Bin> getBins() {
         getJsonText(mApp.getApplicationContext())
                 .map({ String jsonText -> parseJson(jsonText) })
-                .flatMap({ BinData binData ->   makeBins(binData) })
+                .flatMap({ BinData binData -> makeBins(binData) })
     }
 }
