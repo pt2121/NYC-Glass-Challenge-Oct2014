@@ -6,8 +6,10 @@ import com.google.android.glass.widget.CardBuilder;
 import com.intellibins.glassware.binlocation.BinLocationUtils;
 import com.intellibins.glassware.binlocation.IBinLocation;
 import com.intellibins.glassware.model.Bin;
+import com.intellibins.glassware.userlocation.UserLocation;
 import com.intellibins.glassware.view.TuggableView;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,16 +22,20 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.functions.Func2;
-import rx.functions.Functions;
 import rx.schedulers.Schedulers;
 
 public class MenuActivity extends BaseGlassActivity {
 
+    private static final String TAG = MenuActivity.class.getSimpleName();
+
     @Inject
     IBinLocation mBinLocation;
+
+    @Inject
+    UserLocation mUserLocation;
 
     private TuggableView mTuggableView;
 
@@ -62,8 +68,19 @@ public class MenuActivity extends BaseGlassActivity {
                 .subscribe(new Action1<Bin>() {
                     @Override
                     public void call(Bin bin) {
-                        Log.v(MenuActivity.class.getSimpleName(), "bin " + bin.name);
-                        Log.v(MenuActivity.class.getSimpleName(), "address " + bin.address);
+                        Log.v(TAG, "bin " + bin.name);
+                        Log.v(TAG, "address " + bin.address);
+                    }
+                });
+
+        mUserLocation.start();
+        mUserLocation.observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Location>() {
+                    @Override
+                    public void call(Location location) {
+                        Log.v(TAG,
+                                location == null ? "empty" : "user loc : " + location.toString());
                     }
                 });
     }
@@ -78,6 +95,12 @@ public class MenuActivity extends BaseGlassActivity {
     protected void onPause() {
         mTuggableView.deactivate();
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUserLocation.stop();
     }
 
     private View buildView() {

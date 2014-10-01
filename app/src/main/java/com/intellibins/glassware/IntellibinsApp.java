@@ -1,6 +1,7 @@
 package com.intellibins.glassware;
 
 import com.intellibins.glassware.binlocation.BinLocationModule;
+import com.intellibins.glassware.userlocation.UserLocationModule;
 
 import android.app.Application;
 import android.content.Context;
@@ -27,7 +28,9 @@ public class IntellibinsApp extends Application {
     }
 
     private void buildObjectGraphAndInject() {
-        graph = ObjectGraph.create(new IntellibinsModule(this), new BinLocationModule(this));
+        graph = ObjectGraph.create(new IntellibinsModule(this),
+                new BinLocationModule(this),
+                new UserLocationModule(this));
     }
 
     public void inject(Object o) {

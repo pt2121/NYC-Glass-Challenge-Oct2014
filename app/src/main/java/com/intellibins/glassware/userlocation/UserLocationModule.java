@@ -1,34 +1,36 @@
-package com.intellibins.glassware.binlocation;
+package com.intellibins.glassware.userlocation;
 
 import com.intellibins.glassware.MenuActivity;
 
 import android.app.Application;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by prt2121 on 9/27/14.
+ * Created by prt2121 on 9/30/14.
  */
 @Module(
         complete = false,
         injects = MenuActivity.class,
         library = true
 )
-public class BinLocationModule {
+public class UserLocationModule {
 
     private final Application mApp;
 
     @Inject
-    public BinLocationModule(Application app) {
+    public UserLocationModule(Application app) {
         this.mApp = app;
     }
 
     @Provides
-    public IBinLocation provideNycBinLocation() {
-        return new NycBinLocation(mApp);
+    @Singleton
+    public UserLocation provideUserLocation() {
+        return new UserLocation(mApp);
     }
 
 }
