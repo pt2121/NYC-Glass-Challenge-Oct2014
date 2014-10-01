@@ -1,6 +1,7 @@
 package com.intellibins.glassware;
 
 import com.intellibins.glassware.binlocation.BinLocationModule;
+import com.intellibins.glassware.userlocation.UserLocationModule;
 
 import android.app.Application;
 
@@ -13,12 +14,9 @@ import dagger.Provides;
  * Created by prt2121 on 9/28/14.
  */
 @Module(
-        includes = {
-                BinLocationModule.class
-        },
         injects = {
-                IntellibinsApp.class,
-                BinLocationModule.class
+                BinLocationModule.class,
+                UserLocationModule.class
         }
 )
 public class IntellibinsModule {

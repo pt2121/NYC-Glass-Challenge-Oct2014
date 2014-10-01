@@ -7,6 +7,7 @@ import rx.functions.Func2
 class BinLocationUtils {
 
     double myLatitude
+
     double myLongitude
 
     Func2<Bin, Bin, Integer> compare(double lat, double lng) {
@@ -15,7 +16,8 @@ class BinLocationUtils {
         f
     }
 
-    def f = new Func2<Bin, Bin, Integer> () {
+    def f = new Func2<Bin, Bin, Integer>() {
+
         @Override
         public Integer call(Bin b1, Bin b2) {
             float[] result1 = new float[3]
