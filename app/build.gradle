@@ -39,4 +39,5 @@ dependencies {
     compile 'com.netflix.rxjava:rxjava-android:0.20.4'
     compile 'org.codehaus.groovy:groovy:2.4.0-beta-1:grooid'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+    compile 'com.github.prt2121:ProgressBar:1.0@aar'
 }
