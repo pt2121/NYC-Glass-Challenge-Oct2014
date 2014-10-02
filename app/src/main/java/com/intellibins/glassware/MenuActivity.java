@@ -7,7 +7,6 @@ import com.intellibins.glassware.binlocation.BinLocationUtils;
 import com.intellibins.glassware.binlocation.IBinLocation;
 import com.intellibins.glassware.model.Bin;
 import com.intellibins.glassware.userlocation.IUserLocation;
-import com.intellibins.glassware.userlocation.UserLocation;
 import com.intellibins.glassware.view.TuggableView;
 
 import android.location.Location;
@@ -56,8 +55,11 @@ public class MenuActivity extends BaseGlassActivity {
         getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         setContentView(mTuggableView);
 
-        mBinLocation.getBins()
-                .toSortedList(new BinLocationUtils().compare(40.742994, -73.984030))
+        mUserLocation.start();
+        mUserLocation.observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .take(1)
+                .flatMap(findClosestBins)
                 .flatMap(new Func1<List<Bin>, Observable<Bin>>() {
                     @Override
                     public Observable<Bin> call(List<Bin> bins) {
@@ -74,17 +76,16 @@ public class MenuActivity extends BaseGlassActivity {
                     }
                 });
 
-        mUserLocation.start();
-        mUserLocation.observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Location>() {
-                    @Override
-                    public void call(Location location) {
-                        Log.v(TAG,
-                                location == null ? "empty" : "user loc : " + location.toString());
-                    }
-                });
     }
+
+    Func1<Location, Observable<List<Bin>>> findClosestBins = new Func1<Location, Observable<List<Bin>>>() {
+        @Override
+        public Observable<List<Bin>> call(Location location) {
+            return mBinLocation.getBins()
+                    .toSortedList(new BinLocationUtils()
+                            .compare(location.getLatitude(), location.getLongitude()));
+        }
+    };
 
     @Override
     protected void onResume() {
