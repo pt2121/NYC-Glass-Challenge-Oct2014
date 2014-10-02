@@ -29,7 +29,7 @@ public class UserLocationModule {
 
     @Provides
     @Singleton
-    public UserLocation provideUserLocation() {
+    public IUserLocation provideUserLocation() {
         return new UserLocation(mApp);
     }
 

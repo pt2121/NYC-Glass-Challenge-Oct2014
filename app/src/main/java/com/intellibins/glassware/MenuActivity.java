@@ -6,6 +6,7 @@ import com.google.android.glass.widget.CardBuilder;
 import com.intellibins.glassware.binlocation.BinLocationUtils;
 import com.intellibins.glassware.binlocation.IBinLocation;
 import com.intellibins.glassware.model.Bin;
+import com.intellibins.glassware.userlocation.IUserLocation;
 import com.intellibins.glassware.userlocation.UserLocation;
 import com.intellibins.glassware.view.TuggableView;
 
@@ -35,7 +36,7 @@ public class MenuActivity extends BaseGlassActivity {
     IBinLocation mBinLocation;
 
     @Inject
-    UserLocation mUserLocation;
+    IUserLocation mUserLocation;
 
     private TuggableView mTuggableView;
 

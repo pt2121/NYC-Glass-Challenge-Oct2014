@@ -18,7 +18,7 @@ import rx.subjects.BehaviorSubject;
 /**
  * Created by prt2121 on 9/30/14.
  */
-public class UserLocation {
+public class UserLocation implements IUserLocation {
 
     private static final int MAX_TIME = 10 * 60 * 1000; // an old location expires in 10 mins
 
@@ -37,16 +37,19 @@ public class UserLocation {
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);
     }
 
+    @Override
     public void start() {
         final Looper looper = Looper.myLooper();
         mLocationManager.requestLocationUpdates(60 * 1000, 0, criteria, listener, looper);
     }
 
+    @Override
     public void stop() {
         mLocationManager.removeUpdates(listener);
         mSubject.onCompleted();
     }
 
+    @Override
     public Observable<Location> observe() {
         return mSubject;
     }
