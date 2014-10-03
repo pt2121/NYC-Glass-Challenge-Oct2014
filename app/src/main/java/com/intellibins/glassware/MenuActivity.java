@@ -3,39 +3,17 @@ package com.intellibins.glassware;
 import com.google.android.glass.view.WindowUtils;
 import com.google.android.glass.widget.CardBuilder;
 
-import com.intellibins.glassware.binlocation.BinLocationUtils;
-import com.intellibins.glassware.binlocation.IBinLocation;
-import com.intellibins.glassware.model.Bin;
-import com.intellibins.glassware.userlocation.IUserLocation;
 import com.intellibins.glassware.view.TuggableView;
 
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
-
 public class MenuActivity extends BaseGlassActivity {
 
     private static final String TAG = MenuActivity.class.getSimpleName();
-
-    @Inject
-    IBinLocation mBinLocation;
-
-    @Inject
-    IUserLocation mUserLocation;
 
     private TuggableView mTuggableView;
 
@@ -45,9 +23,6 @@ public class MenuActivity extends BaseGlassActivity {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
-        IntellibinsApp app = IntellibinsApp.get(this);
-        app.inject(this);
-
         mView = buildView();
 
         mTuggableView = new TuggableView(this, mView);
@@ -55,37 +30,7 @@ public class MenuActivity extends BaseGlassActivity {
         getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         setContentView(mTuggableView);
 
-        mUserLocation.start();
-        mUserLocation.observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .take(1)
-                .flatMap(findClosestBins)
-                .flatMap(new Func1<List<Bin>, Observable<Bin>>() {
-                    @Override
-                    public Observable<Bin> call(List<Bin> bins) {
-                        return Observable.from(bins);
-                    }
-                })
-                .take(5)
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(new Action1<Bin>() {
-                    @Override
-                    public void call(Bin bin) {
-                        Log.v(TAG, "bin " + bin.name);
-                        Log.v(TAG, "address " + bin.address);
-                    }
-                });
-
     }
-
-    Func1<Location, Observable<List<Bin>>> findClosestBins = new Func1<Location, Observable<List<Bin>>>() {
-        @Override
-        public Observable<List<Bin>> call(Location location) {
-            return mBinLocation.getBins()
-                    .toSortedList(new BinLocationUtils()
-                            .compare(location.getLatitude(), location.getLongitude()));
-        }
-    };
 
     @Override
     protected void onResume() {
@@ -97,12 +42,6 @@ public class MenuActivity extends BaseGlassActivity {
     protected void onPause() {
         mTuggableView.deactivate();
         super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mUserLocation.stop();
     }
 
     private View buildView() {

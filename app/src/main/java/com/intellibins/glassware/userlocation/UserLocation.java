@@ -33,7 +33,8 @@ public class UserLocation implements IUserLocation {
     public UserLocation(Application app) {
         mLocationManager = (LocationManager) app.getSystemService(Context.LOCATION_SERVICE);
         mSubject = BehaviorSubject.create(getLastBestLocation(MAX_TIME));
-        mSubject.subscribeOn(Schedulers.io());
+        //mSubject.subscribeOn(Schedulers.io());
+        mSubject.subscribeOn(Schedulers.newThread());
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);
     }
 

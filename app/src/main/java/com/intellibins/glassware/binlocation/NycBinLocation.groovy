@@ -4,13 +4,14 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import android.util.Log
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.intellibins.glassware.R
 import com.intellibins.glassware.model.Bin
 import com.intellibins.glassware.model.nyc.BinData
 import rx.Observable
 import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class NycBinLocation implements IBinLocation {
 
@@ -20,22 +21,37 @@ class NycBinLocation implements IBinLocation {
         mApp = app
     }
 
-    private BinData parseJson(String jsonText) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create()
-        gson.fromJson(jsonText, BinData.class)
+    private Observable<BinData> parseJson(String jsonText) {
+        Observable.create({
+            Subscriber<BinData> subscriber ->
+                Thread.start({
+                    subscriber.onNext(
+                            new GsonBuilder()
+                                    .setPrettyPrinting()
+                                    .create()
+                                    .fromJson(jsonText, BinData.class))
+                    subscriber.onCompleted()
+                })
+        } as Observable.OnSubscribe<BinData>)
     }
 
     private Observable<String> getJsonText(Context context) {
-        try {
-            Resources res = context.getResources()
-            InputStream inputStream = res.openRawResource(R.raw.json)
-            byte[] b = new byte[inputStream.available()]
-            int bytes = inputStream.read(b)
-            bytes == -1 ? Observable.<String> empty()
-                    : Observable.just(new String(b))
-        } catch (Exception e) {
-            Observable.empty()
-        }
+        Observable.create({
+            Subscriber<String> subscriber ->
+                Thread.start({
+                    try {
+                        Resources res = context.getResources()
+                        InputStream inputStream = res.openRawResource(R.raw.json)
+                        byte[] b = new byte[inputStream.available()]
+                        inputStream.read(b)
+                        subscriber.onNext(new String(b))
+                        subscriber.onCompleted()
+                        inputStream.close()
+                        System.gc()
+                    } catch (Exception e) {
+                    }
+                })
+        } as Observable.OnSubscribe<String>)
     }
 
     private Observable<Bin> makeBins(final BinData binData) {
@@ -64,7 +80,9 @@ class NycBinLocation implements IBinLocation {
     @Override
     Observable<Bin> getBins() {
         getJsonText(mApp.getApplicationContext())
-                .map({ String jsonText -> parseJson(jsonText) })
+                .flatMap({ String jsonText -> parseJson(jsonText) })
                 .flatMap({ BinData binData -> makeBins(binData) })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 }
