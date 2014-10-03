@@ -4,9 +4,10 @@
     <string name="app_name">Intellibins</string>
     <string name="title_activity_menu">Menu</string>
     <string name="hello_world">Hello world!</string>
-
     <string name="recycle_this">Recycle this</string>
     <string name="plastic">Plastic</string>
     <string name="paper">Paper</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

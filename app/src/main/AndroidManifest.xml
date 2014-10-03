@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.intellibins.glassware"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.intellibins.glassware" >
 
     <uses-permission android:name="com.google.android.glass.permission.DEVELOPMENT" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
-        android:name=".IntellibinsApp"
+        android:name="com.intellibins.glassware.IntellibinsApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name">
+        android:label="@string/app_name" >
         <activity
             android:name="com.intellibins.glassware.MenuActivity"
             android:icon="@drawable/ic_glass_logo"
-            android:label="@string/title_activity_menu">
+            android:label="@string/title_activity_menu" >
+
+        </activity>
+        <activity
+            android:name="com.intellibins.glassware.SplashScreenActivity"
+            android:label="@string/title_activity_splash_screen" >
             <intent-filter>
                 <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
             </intent-filter>
