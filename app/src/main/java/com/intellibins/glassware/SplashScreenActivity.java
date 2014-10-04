@@ -7,15 +7,17 @@ import com.intellibins.glassware.userlocation.IUserLocation;
 import com.intellibins.glassware.view.TuggableView;
 import com.prt2121.glass.widget.SliderView;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -44,6 +46,8 @@ public class SplashScreenActivity extends BaseGlassActivity {
 
     private TuggableView mTuggableView;
 
+    private Subscription mSubscription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +65,7 @@ public class SplashScreenActivity extends BaseGlassActivity {
     }
 
     private void getNearestBinThenFinish() {
-        mUserLocation.observe()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscription = mUserLocation.observe()
                 .take(1)
                 .flatMap(findClosestBins)
                 .flatMap(new Func1<List<Bin>, Observable<Bin>>() {
@@ -74,10 +76,19 @@ public class SplashScreenActivity extends BaseGlassActivity {
                 })
                 .take(5)
                 .toList()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Bin>>() {
                     @Override
                     public void call(List<Bin> bins) {
-                        Log.v(TAG, "YEAH");
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(
+                                        new Intent(SplashScreenActivity.this, MenuActivity.class));
+                            }
+                        });
+                        SplashScreenActivity.this.finish();
                     }
                 });
     }
@@ -98,6 +109,7 @@ public class SplashScreenActivity extends BaseGlassActivity {
     protected void onDestroy() {
         super.onDestroy();
         mUserLocation.stop();
+        mSubscription.unsubscribe();
     }
 
 }
