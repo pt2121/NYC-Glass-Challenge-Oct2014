@@ -20,7 +20,7 @@ public class TextResultProcessor extends ResultProcessor<ParsedResult> {
     private static final String SEARCH_URL = "https://www.google.com/search?q=%s";
 
     public TextResultProcessor(Context context, ParsedResult parsedResult,
-                               Result result, Uri photoUri) {
+            Result result, Uri photoUri) {
         super(context, parsedResult, result, photoUri);
     }
 

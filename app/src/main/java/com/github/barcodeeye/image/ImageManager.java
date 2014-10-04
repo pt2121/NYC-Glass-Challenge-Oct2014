@@ -14,7 +14,9 @@ import java.io.IOException;
 public class ImageManager {
 
     private static final String TAG = ImageManager.class.getSimpleName();
+
     private static final String PHOTO_DIR = "BarcodeEye";
+
     private final File mDir;
 
     public ImageManager(Context context) {

@@ -31,7 +31,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * Utility methods for retrieving content over HTTP using the more-supported {@code java.net} classes
+ * Utility methods for retrieving content over HTTP using the more-supported {@code java.net}
+ * classes
  * in Android.
  */
 public final class HttpHelper {
@@ -39,30 +40,12 @@ public final class HttpHelper {
     private static final String TAG = HttpHelper.class.getSimpleName();
 
     private static final Collection<String> REDIRECTOR_DOMAINS = new HashSet<String>(Arrays.asList(
-            "amzn.to", "bit.ly", "bitly.com", "fb.me", "goo.gl", "is.gd", "j.mp", "lnkd.in", "ow.ly",
+            "amzn.to", "bit.ly", "bitly.com", "fb.me", "goo.gl", "is.gd", "j.mp", "lnkd.in",
+            "ow.ly",
             "R.BEETAGG.COM", "r.beetagg.com", "SCN.BY", "su.pr", "t.co", "tinyurl.com", "tr.im"
     ));
 
     private HttpHelper() {
-    }
-
-    public enum ContentType {
-        /**
-         * HTML-like content type, including HTML, XHTML, etc.
-         */
-        HTML,
-        /**
-         * JSON content
-         */
-        JSON,
-        /**
-         * XML
-         */
-        XML,
-        /**
-         * Plain text content
-         */
-        TEXT,
     }
 
     /**
@@ -79,9 +62,11 @@ public final class HttpHelper {
      * @param type     expected text-like MIME type of that content
      * @param maxChars approximate maximum characters to read from the source
      * @return content as a {@code String}
-     * @throws java.io.IOException if the content can't be retrieved because of a bad URI, network problem, etc.
+     * @throws java.io.IOException if the content can't be retrieved because of a bad URI, network
+     *                             problem, etc.
      */
-    public static CharSequence downloadViaHttp(String uri, ContentType type, int maxChars) throws IOException {
+    public static CharSequence downloadViaHttp(String uri, ContentType type, int maxChars)
+            throws IOException {
         String contentTypes;
         switch (type) {
             case HTML:
@@ -100,7 +85,8 @@ public final class HttpHelper {
         return downloadViaHttp(uri, contentTypes, maxChars);
     }
 
-    private static CharSequence downloadViaHttp(String uri, String contentTypes, int maxChars) throws IOException {
+    private static CharSequence downloadViaHttp(String uri, String contentTypes, int maxChars)
+            throws IOException {
         int redirects = 0;
         while (redirects < 5) {
             URL url = new URL(uri);
@@ -246,6 +232,25 @@ public final class HttpHelper {
             // Another Android bug: https://code.google.com/p/android/issues/detail?id=18856
             throw new IOException(sioobe);
         }
+    }
+
+    public enum ContentType {
+        /**
+         * HTML-like content type, including HTML, XHTML, etc.
+         */
+        HTML,
+        /**
+         * JSON content
+         */
+        JSON,
+        /**
+         * XML
+         */
+        XML,
+        /**
+         * Plain text content
+         */
+        TEXT,
     }
 
 }

@@ -33,6 +33,10 @@ import android.widget.ListView;
  */
 public final class BookmarkPickerActivity extends ListActivity {
 
+    static final int TITLE_COLUMN = 0;
+
+    static final int URL_COLUMN = 1;
+
     private static final String TAG = BookmarkPickerActivity.class.getSimpleName();
 
     private static final String[] BOOKMARK_PROJECTION = {
@@ -40,11 +44,9 @@ public final class BookmarkPickerActivity extends ListActivity {
             Browser.BookmarkColumns.URL
     };
 
-    static final int TITLE_COLUMN = 0;
-    static final int URL_COLUMN = 1;
-
     private static final String BOOKMARK_SELECTION =
-            Browser.BookmarkColumns.BOOKMARK + " = 1 AND " + Browser.BookmarkColumns.URL + " IS NOT NULL";
+            Browser.BookmarkColumns.BOOKMARK + " = 1 AND " + Browser.BookmarkColumns.URL
+                    + " IS NOT NULL";
 
     private Cursor cursor;
 

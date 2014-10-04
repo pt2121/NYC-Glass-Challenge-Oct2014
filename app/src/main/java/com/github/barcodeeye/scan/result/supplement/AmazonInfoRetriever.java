@@ -38,13 +38,15 @@ import java.util.Locale;
 final class AmazonInfoRetriever extends SupplementalInfoRetriever {
 
     private final String type;
+
     private final String productID;
+
     private final String country;
 
     AmazonInfoRetriever(TextView textView,
-                        String type,
-                        String productID,
-                        Context context) {
+            String type,
+            String productID,
+            Context context) {
         super(textView);
         String country = LocaleManager.getCountry(context);
         if ("ISBN".equals(type) && !Locale.US.getCountry().equals(country)) {
@@ -53,6 +55,21 @@ final class AmazonInfoRetriever extends SupplementalInfoRetriever {
         this.type = type;
         this.productID = productID;
         this.country = country;
+    }
+
+    private static void assertTextNext(XmlPullParser xpp)
+            throws XmlPullParserException, IOException {
+        if (xpp.next() != XmlPullParser.TEXT) {
+            throw new IOException();
+        }
+    }
+
+    private static XmlPullParser buildParser(CharSequence contents) throws XmlPullParserException {
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        XmlPullParser xpp = factory.newPullParser();
+        xpp.setInput(new StringReader(contents.toString()));
+        return xpp;
     }
 
     @Override
@@ -86,7 +103,8 @@ final class AmazonInfoRetriever extends SupplementalInfoRetriever {
             boolean seenLowestNewPrice = false;
             boolean seenLowestUsedPrice = false;
 
-            for (int eventType = xpp.getEventType(); eventType != XmlPullParser.END_DOCUMENT; eventType = xpp.next()) {
+            for (int eventType = xpp.getEventType(); eventType != XmlPullParser.END_DOCUMENT;
+                    eventType = xpp.next()) {
                 if (eventType == XmlPullParser.START_TAG) {
                     String name = xpp.getName();
                     if ("Item".equals(name)) {
@@ -146,22 +164,9 @@ final class AmazonInfoRetriever extends SupplementalInfoRetriever {
             maybeAddText(formattedUsedPrice, newTexts);
         }
 
-        append(productID, "Amazon " + theCountry, newTexts.toArray(new String[newTexts.size()]), detailPageURL);
+        append(productID, "Amazon " + theCountry, newTexts.toArray(new String[newTexts.size()]),
+                detailPageURL);
         return true;
-    }
-
-    private static void assertTextNext(XmlPullParser xpp) throws XmlPullParserException, IOException {
-        if (xpp.next() != XmlPullParser.TEXT) {
-            throw new IOException();
-        }
-    }
-
-    private static XmlPullParser buildParser(CharSequence contents) throws XmlPullParserException {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        factory.setNamespaceAware(true);
-        XmlPullParser xpp = factory.newPullParser();
-        xpp.setInput(new StringReader(contents.toString()));
-        return xpp;
     }
 
 }

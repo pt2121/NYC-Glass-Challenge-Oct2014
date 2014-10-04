@@ -40,9 +40,18 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object, Object
 
     private static final String TAG = "SupplementalInfo";
 
+    private final WeakReference<TextView> textViewRef;
+
+    private final Collection<Spannable> newContents;
+
+    SupplementalInfoRetriever(TextView textView) {
+        textViewRef = new WeakReference<TextView>(textView);
+        newContents = new ArrayList<Spannable>();
+    }
+
     public static void maybeInvokeRetrieval(TextView textView,
-                                            ParsedResult result,
-                                            Context context) {
+            ParsedResult result,
+            Context context) {
         if (result instanceof URIParsedResult) {
             SupplementalInfoRetriever uriRetriever =
                     new URIResultInfoRetriever(textView, (URIParsedResult) result, context);
@@ -83,12 +92,26 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object, Object
         }
     }
 
-    private final WeakReference<TextView> textViewRef;
-    private final Collection<Spannable> newContents;
+    static void maybeAddText(String text, Collection<String> texts) {
+        if (text != null && !text.isEmpty()) {
+            texts.add(text);
+        }
+    }
 
-    SupplementalInfoRetriever(TextView textView) {
-        textViewRef = new WeakReference<TextView>(textView);
-        newContents = new ArrayList<Spannable>();
+    static void maybeAddTextSeries(Collection<String> textSeries, Collection<String> texts) {
+        if (textSeries != null && !textSeries.isEmpty()) {
+            boolean first = true;
+            StringBuilder authorsText = new StringBuilder();
+            for (String author : textSeries) {
+                if (first) {
+                    first = false;
+                } else {
+                    authorsText.append(", ");
+                }
+                authorsText.append(author);
+            }
+            texts.add(authorsText.toString());
+        }
     }
 
     @Override
@@ -148,32 +171,11 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object, Object
             } else if (linkURL.startsWith("HTTPS://")) {
                 linkURL = "https" + linkURL.substring(5);
             }
-            content.setSpan(new URLSpan(linkURL), linkStart, linkEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            content.setSpan(new URLSpan(linkURL), linkStart, linkEnd,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         newContents.add(content);
-    }
-
-    static void maybeAddText(String text, Collection<String> texts) {
-        if (text != null && !text.isEmpty()) {
-            texts.add(text);
-        }
-    }
-
-    static void maybeAddTextSeries(Collection<String> textSeries, Collection<String> texts) {
-        if (textSeries != null && !textSeries.isEmpty()) {
-            boolean first = true;
-            StringBuilder authorsText = new StringBuilder();
-            for (String author : textSeries) {
-                if (first) {
-                    first = false;
-                } else {
-                    authorsText.append(", ");
-                }
-                authorsText.append(author);
-            }
-            texts.add(authorsText.toString());
-        }
     }
 
 }

@@ -31,7 +31,9 @@ import java.util.Map;
 public final class LocaleManager {
 
     private static final String DEFAULT_TLD = "com";
+
     private static final String DEFAULT_COUNTRY = "US";
+
     private static final String DEFAULT_LANGUAGE = "en";
 
     /**
@@ -77,6 +79,11 @@ public final class LocaleManager {
     }
 
     /**
+     * Book search is offered everywhere that web search is available.
+     */
+    private static final Map<String, String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD = GOOGLE_COUNTRY_TLD;
+
+    /**
      * Google Product Search for mobile is available in fewer countries than web
      * search. See here:
      * http://support.google.com/merchants/bin/answer.py?hl=en-GB&answer=160619
@@ -99,11 +106,6 @@ public final class LocaleManager {
         GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.UK.getCountry(), "co.uk");
         GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.US.getCountry(), "com");
     }
-
-    /**
-     * Book search is offered everywhere that web search is available.
-     */
-    private static final Map<String, String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD = GOOGLE_COUNTRY_TLD;
 
     private static final Collection<String> TRANSLATED_HELP_ASSET_LANGUAGES = Arrays
             .asList("de", "en", "es", "fr", "it", "ja", "ko", "nl", "pt", "ru",

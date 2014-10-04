@@ -33,8 +33,11 @@ public final class InactivityTimer {
     private static final long INACTIVITY_DELAY_MS = 5 * 60 * 1000L;
 
     private final Activity activity;
+
     private final BroadcastReceiver powerStatusReceiver;
+
     private boolean registered;
+
     private AsyncTask<?, ?, ?> inactivityTask;
 
     public InactivityTimer(Activity activity) {
@@ -84,6 +87,7 @@ public final class InactivityTimer {
     }
 
     private final class PowerStatusReceiver extends BroadcastReceiver {
+
         @Override
         public void onReceive(Context context, Intent intent) {
             if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
@@ -101,6 +105,7 @@ public final class InactivityTimer {
 
     private final class InactivityAsyncTask extends
             AsyncTask<Object, Object, Object> {
+
         @Override
         protected Object doInBackground(Object... objects) {
             try {

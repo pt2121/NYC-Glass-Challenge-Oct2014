@@ -51,18 +51,17 @@ public final class CaptureActivityHandler extends Handler {
             .getSimpleName();
 
     private final CaptureActivity activity;
+
     private final DecodeThread decodeThread;
-    private State state;
+
     private final CameraManager cameraManager;
 
-    private enum State {
-        PREVIEW, SUCCESS, DONE
-    }
+    private State state;
 
     public CaptureActivityHandler(CaptureActivity activity,
-                                  Collection<BarcodeFormat> decodeFormats,
-                                  Map<DecodeHintType, ?> baseHints, String characterSet,
-                                  CameraManager cameraManager) {
+            Collection<BarcodeFormat> decodeFormats,
+            Map<DecodeHintType, ?> baseHints, String characterSet,
+            CameraManager cameraManager) {
         this.activity = activity;
         decodeThread = new DecodeThread(activity, decodeFormats, baseHints,
                 characterSet, new ViewfinderResultPointCallback(
@@ -162,6 +161,10 @@ public final class CaptureActivityHandler extends Handler {
                     R.id.decode);
             activity.drawViewfinder();
         }
+    }
+
+    private enum State {
+        PREVIEW, SUCCESS, DONE
     }
 
 }

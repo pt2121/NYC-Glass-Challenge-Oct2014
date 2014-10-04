@@ -25,15 +25,23 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 final class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 5;
-    private static final String DB_NAME = "barcode_scanner_history.db";
     static final String TABLE_NAME = "history";
+
     static final String ID_COL = "id";
+
     static final String TEXT_COL = "text";
+
     static final String FORMAT_COL = "format";
+
     static final String DISPLAY_COL = "display";
+
     static final String TIMESTAMP_COL = "timestamp";
+
     static final String DETAILS_COL = "details";
+
+    private static final int DB_VERSION = 5;
+
+    private static final String DB_NAME = "barcode_scanner_history.db";
 
     DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

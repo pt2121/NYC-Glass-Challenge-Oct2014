@@ -21,7 +21,9 @@ import android.graphics.drawable.Drawable;
 final class AppInfo implements Comparable<AppInfo> {
 
     private final String packageName;
+
     private final String label;
+
     private final Drawable icon;
 
     AppInfo(String packageName, String label, Drawable icon) {

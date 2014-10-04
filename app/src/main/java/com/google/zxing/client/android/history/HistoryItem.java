@@ -21,7 +21,9 @@ import com.google.zxing.Result;
 public final class HistoryItem {
 
     private final Result result;
+
     private final String display;
+
     private final String details;
 
     HistoryItem(Result result, String display, String details) {

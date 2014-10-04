@@ -44,6 +44,7 @@ final class LoadPackagesAsyncTask extends AsyncTask<Void, Void, List<AppInfo>> {
     private static final String[] PKG_PREFIX_WHITELIST = {
             "com.google.android.apps.",
     };
+
     private static final String[] PKG_PREFIX_BLACKLIST = {
             "com.android.",
             "android",
@@ -55,6 +56,23 @@ final class LoadPackagesAsyncTask extends AsyncTask<Void, Void, List<AppInfo>> {
 
     LoadPackagesAsyncTask(ListActivity activity) {
         this.activity = activity;
+    }
+
+    private static boolean isHidden(String packageName) {
+        if (packageName == null) {
+            return true;
+        }
+        for (String prefix : PKG_PREFIX_WHITELIST) {
+            if (packageName.startsWith(prefix)) {
+                return false;
+            }
+        }
+        for (String prefix : PKG_PREFIX_BLACKLIST) {
+            if (packageName.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -76,23 +94,6 @@ final class LoadPackagesAsyncTask extends AsyncTask<Void, Void, List<AppInfo>> {
         return labelsPackages;
     }
 
-    private static boolean isHidden(String packageName) {
-        if (packageName == null) {
-            return true;
-        }
-        for (String prefix : PKG_PREFIX_WHITELIST) {
-            if (packageName.startsWith(prefix)) {
-                return false;
-            }
-        }
-        for (String prefix : PKG_PREFIX_BLACKLIST) {
-            if (packageName.startsWith(prefix)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     protected void onPostExecute(final List<AppInfo> results) {
         ListAdapter listAdapter = new ArrayAdapter<AppInfo>(activity,
@@ -104,7 +105,8 @@ final class LoadPackagesAsyncTask extends AsyncTask<Void, Void, List<AppInfo>> {
                 View view = super.getView(position, convertView, parent);
                 Drawable icon = results.get(position).getIcon();
                 if (icon != null) {
-                    ((ImageView) view.findViewById(R.id.app_picker_list_item_icon)).setImageDrawable(icon);
+                    ((ImageView) view.findViewById(R.id.app_picker_list_item_icon))
+                            .setImageDrawable(icon);
                 }
                 return view;
             }

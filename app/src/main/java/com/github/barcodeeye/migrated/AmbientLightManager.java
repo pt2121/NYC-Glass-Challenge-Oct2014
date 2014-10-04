@@ -33,10 +33,13 @@ import android.preference.PreferenceManager;
 public final class AmbientLightManager implements SensorEventListener {
 
     private static final float TOO_DARK_LUX = 45.0f;
+
     private static final float BRIGHT_ENOUGH_LUX = 450.0f;
 
     private final Context context;
+
     private CameraManager cameraManager;
+
     private Sensor lightSensor;
 
     public AmbientLightManager(Context context) {

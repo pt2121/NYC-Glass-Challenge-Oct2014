@@ -41,57 +41,6 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult, Object,
         this.wifiManager = wifiManager;
     }
 
-    @Override
-    protected Object doInBackground(WifiParsedResult... args) {
-        WifiParsedResult theWifiResult = args[0];
-        // Start WiFi, otherwise nothing will work
-        if (!wifiManager.isWifiEnabled()) {
-            Log.i(TAG, "Enabling wi-fi...");
-            if (wifiManager.setWifiEnabled(true)) {
-                Log.i(TAG, "Wi-fi enabled");
-            } else {
-                Log.w(TAG, "Wi-fi could not be enabled!");
-                return null;
-            }
-            // This happens very quickly, but need to wait for it to enable. A little busy wait?
-            int count = 0;
-            while (!wifiManager.isWifiEnabled()) {
-                if (count >= 10) {
-                    Log.i(TAG, "Took too long to enable wi-fi, quitting");
-                    return null;
-                }
-                Log.i(TAG, "Still waiting for wi-fi to enable...");
-                try {
-                    Thread.sleep(1000L);
-                } catch (InterruptedException ie) {
-                    // continue
-                }
-                count++;
-            }
-        }
-        String networkTypeString = theWifiResult.getNetworkEncryption();
-        NetworkType networkType;
-        try {
-            networkType = NetworkType.forIntentValue(networkTypeString);
-        } catch (IllegalArgumentException ignored) {
-            Log.w(TAG, "Bad network type; see NetworkType values: " + networkTypeString);
-            return null;
-        }
-        if (networkType == NetworkType.NO_PASSWORD) {
-            changeNetworkUnEncrypted(wifiManager, theWifiResult);
-        } else {
-            String password = theWifiResult.getPassword();
-            if (password != null && !password.isEmpty()) {
-                if (networkType == NetworkType.WEP) {
-                    changeNetworkWEP(wifiManager, theWifiResult);
-                } else if (networkType == NetworkType.WPA) {
-                    changeNetworkWPA(wifiManager, theWifiResult);
-                }
-            }
-        }
-        return null;
-    }
-
     /**
      * Update the network: either create a new network or modify an existing network
      *
@@ -163,7 +112,8 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult, Object,
     }
 
     // Adding an open, unsecured network
-    private static void changeNetworkUnEncrypted(WifiManager wifiManager, WifiParsedResult wifiResult) {
+    private static void changeNetworkUnEncrypted(WifiManager wifiManager,
+            WifiParsedResult wifiResult) {
         WifiConfiguration config = changeNetworkCommon(wifiResult);
         config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
         updateNetwork(wifiManager, config);
@@ -204,7 +154,8 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult, Object,
     /**
      * @param value          input to check
      * @param allowedLengths allowed lengths, if any
-     * @return true if value is a non-null, non-empty string of hex digits, and if allowed lengths are given, has
+     * @return true if value is a non-null, non-empty string of hex digits, and if allowed lengths
+     * are given, has
      * an allowed length
      */
     private static boolean isHexOfLength(CharSequence value, int... allowedLengths) {
@@ -220,6 +171,57 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult, Object,
             }
         }
         return false;
+    }
+
+    @Override
+    protected Object doInBackground(WifiParsedResult... args) {
+        WifiParsedResult theWifiResult = args[0];
+        // Start WiFi, otherwise nothing will work
+        if (!wifiManager.isWifiEnabled()) {
+            Log.i(TAG, "Enabling wi-fi...");
+            if (wifiManager.setWifiEnabled(true)) {
+                Log.i(TAG, "Wi-fi enabled");
+            } else {
+                Log.w(TAG, "Wi-fi could not be enabled!");
+                return null;
+            }
+            // This happens very quickly, but need to wait for it to enable. A little busy wait?
+            int count = 0;
+            while (!wifiManager.isWifiEnabled()) {
+                if (count >= 10) {
+                    Log.i(TAG, "Took too long to enable wi-fi, quitting");
+                    return null;
+                }
+                Log.i(TAG, "Still waiting for wi-fi to enable...");
+                try {
+                    Thread.sleep(1000L);
+                } catch (InterruptedException ie) {
+                    // continue
+                }
+                count++;
+            }
+        }
+        String networkTypeString = theWifiResult.getNetworkEncryption();
+        NetworkType networkType;
+        try {
+            networkType = NetworkType.forIntentValue(networkTypeString);
+        } catch (IllegalArgumentException ignored) {
+            Log.w(TAG, "Bad network type; see NetworkType values: " + networkTypeString);
+            return null;
+        }
+        if (networkType == NetworkType.NO_PASSWORD) {
+            changeNetworkUnEncrypted(wifiManager, theWifiResult);
+        } else {
+            String password = theWifiResult.getPassword();
+            if (password != null && !password.isEmpty()) {
+                if (networkType == NetworkType.WEP) {
+                    changeNetworkWEP(wifiManager, theWifiResult);
+                } else if (networkType == NetworkType.WPA) {
+                    changeNetworkWPA(wifiManager, theWifiResult);
+                }
+            }
+        }
+        return null;
     }
 
 }

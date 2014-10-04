@@ -20,7 +20,6 @@ import com.github.barcodeeye.migrated.HttpHelper;
 import com.github.barcodeeye.migrated.LocaleManager;
 import com.intellibins.glassware.R;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +39,9 @@ import java.util.Collection;
 final class BookResultInfoRetriever extends SupplementalInfoRetriever {
 
     private final String isbn;
+
     private final String source;
+
     private final Context context;
 
     BookResultInfoRetriever(TextView textView, String isbn, Context context) {

@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 final class TitleRetriever extends SupplementalInfoRetriever {
 
     private static final Pattern TITLE_PATTERN = Pattern.compile("<title>([^<]+)");
+
     private static final int MAX_TITLE_LEN = 100;
 
     private final String httpUrl;
