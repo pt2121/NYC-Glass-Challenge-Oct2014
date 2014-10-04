@@ -47,7 +47,7 @@ public class MenuActivity extends BaseGlassActivity {
     private View buildView() {
         CardBuilder card = new CardBuilder(this, CardBuilder.Layout.TEXT);
 
-        card.setText(R.string.hello_world);
+        card.setText("Whatever");
         return card.getView();
     }
 

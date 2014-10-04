@@ -2,4 +2,83 @@
 <resources>
 
     <style name="AppTheme" parent="android:Theme.Holo.Light"></style>
+
+    <!-- BarcodeEye -->
+    <style name="Text">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Text.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text.Small">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Text.Large">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- Capture -->
+    <style name="Capture.Text.Hint" parent="@style/Text.Small"></style>
+
+    <style name="Capture.Text.Label" parent="@style/Text.Bold">
+        <item name="android:gravity">right</item>
+    </style>
+
+
+    <style name="Capture.Text.Value" parent="@style/Text"></style>
+
+    <style name="Capture.Text.Content" parent="@style/Text.Large"></style>
+
+    <style name="Capture.Text.SupplementalContent" parent="@style/Text">
+        <item name="android:textColorLink">@android:color/white</item>
+    </style>
+    <!-- BarcodeEye -->
+
+    <style name="OverlayText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:shadowColor">@android:color/black</item>
+
+    </style>
+    <!-- <item name="android:shadowDx">1.0</item>
+            <item name="android:shadowDy">1.0</item>
+            <item name="android:shadowRadius">1.0</item> -->
+    <style name="LargeOverlayText" parent="@style/OverlayText">
+        <item name="android:textSize">@dimen/large_text_size</item>
+    </style>
+
+    <style name="MediumOverlayText" parent="@style/OverlayText">
+        <item name="android:textSize">@dimen/medium_text_size</item>
+    </style>
+
+    <style name="SmallOverlayText" parent="@style/OverlayText">
+        <item name="android:textSize">@dimen/small_text_size</item>
+    </style>
+
+    <style name="ContextualDialog" >
+        <item name="android:windowEnterAnimation">@anim/show_contextual</item>
+        <item name="android:windowExitAnimation">@anim/hide_contextual</item>
+    </style>
+
+    <!-- loading -->
+    <style name="ContextualDialogTheme">
+        <item name="android:backgroundDimAmount">@dimen/background_dim_amount</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/ContextualDialog</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:colorBackgroundCacheHint">@android:color/transparent</item>
+        <item name="android:windowActionBar">false</item>
+    </style>
+
+    <style name="ContextualDialogTheme.NoAnimation" parent="@style/ContextualDialogTheme">
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+    <!-- loading -->
+
 </resources>

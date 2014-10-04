@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.intellibins.glassware"
+<manifest
+    package="com.intellibins.glassware"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="com.google.android.glass.permission.DEVELOPMENT" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.intellibins.glassware.IntellibinsApp"
@@ -19,6 +24,13 @@
         <activity
             android:name="com.intellibins.glassware.SplashScreenActivity"
             android:label="@string/title_activity_splash_screen">
+
+        </activity>
+
+        <activity
+            android:name=".CaptureActivity"
+            android:icon="@drawable/icon"
+            android:label="@string/title_activity_scanner">
             <intent-filter>
                 <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
             </intent-filter>
@@ -27,6 +39,15 @@
                 android:name="com.google.android.glass.VoiceTrigger"
                 android:resource="@xml/voice_trigger" />
         </activity>
+        <activity
+            android:name="com.github.barcodeeye.scan.ResultsActivity"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="landscape"
+            android:stateNotNeeded="true"
+            android:theme="@style/CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
     </application>
 
 </manifest>
