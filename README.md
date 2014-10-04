@@ -1,7 +1,5 @@
-intellibins for Glass<sup>TM</sup>.
+intellibins for Glass<sup>TM</sup>
 ======================
-
-intellibins for GLASS
 
 This repo is a redo version of https://github.com/intellibins/intellibins.
 
