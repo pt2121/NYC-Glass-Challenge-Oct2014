@@ -18,19 +18,11 @@
         <activity
             android:name="com.intellibins.glassware.MenuActivity"
             android:icon="@drawable/ic_glass_logo"
-            android:label="@string/title_activity_menu">
-
-        </activity>
+            android:label="@string/title_activity_menu" />
+        
         <activity
             android:name="com.intellibins.glassware.SplashScreenActivity"
             android:label="@string/title_activity_splash_screen">
-
-        </activity>
-
-        <activity
-            android:name=".CaptureActivity"
-            android:icon="@drawable/icon"
-            android:label="@string/title_activity_scanner">
             <intent-filter>
                 <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
             </intent-filter>
@@ -39,6 +31,12 @@
                 android:name="com.google.android.glass.VoiceTrigger"
                 android:resource="@xml/voice_trigger" />
         </activity>
+
+        <activity
+            android:name=".CaptureActivity"
+            android:icon="@drawable/icon"
+            android:label="@string/title_activity_scanner" />
+
         <activity
             android:name="com.github.barcodeeye.scan.ResultsActivity"
             android:clearTaskOnLaunch="true"

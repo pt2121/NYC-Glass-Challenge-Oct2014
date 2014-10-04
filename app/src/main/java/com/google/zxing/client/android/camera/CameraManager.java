@@ -40,20 +40,17 @@ public final class CameraManager {
     private static final String TAG = CameraManager.class.getSimpleName();
 
     private static final int MIN_FRAME_WIDTH = 240;
+
     private static final int MIN_FRAME_HEIGHT = 240;
+
     private static final int MAX_FRAME_WIDTH = 1200; // = 5/8 * 1920
+
     private static final int MAX_FRAME_HEIGHT = 675; // = 5/8 * 1080
 
     private final Context context;
+
     private final CameraConfigurationManager configManager;
-    private Camera camera;
-    private AutoFocusManager autoFocusManager;
-    private Rect framingRect;
-    private Rect framingRectInPreview;
-    private boolean initialized;
-    private boolean previewing;
-    private int requestedFramingRectWidth;
-    private int requestedFramingRectHeight;
+
     /**
      * Preview frames are delivered here, which we pass on to the registered
      * handler. Make sure to
@@ -61,10 +58,38 @@ public final class CameraManager {
      */
     private final PreviewCallback previewCallback;
 
+    private Camera camera;
+
+    private AutoFocusManager autoFocusManager;
+
+    private Rect framingRect;
+
+    private Rect framingRectInPreview;
+
+    private boolean initialized;
+
+    private boolean previewing;
+
+    private int requestedFramingRectWidth;
+
+    private int requestedFramingRectHeight;
+
     public CameraManager(Context context) {
         this.context = context;
         this.configManager = new CameraConfigurationManager(context);
         previewCallback = new PreviewCallback(configManager);
+    }
+
+    private static int findDesiredDimensionInRange(int resolution, int hardMin,
+            int hardMax) {
+        int dim = 5 * resolution / 8; // Target 5/8 of each dimension
+        if (dim < hardMin) {
+            return hardMin;
+        }
+        if (dim > hardMax) {
+            return hardMax;
+        }
+        return dim;
     }
 
     /**
@@ -72,8 +97,7 @@ public final class CameraManager {
      *
      * @param holder The surface object which the camera will draw preview frames
      *               into.
-     * @throws java.io.IOException  Indicates the camera driver failed to open.
-     * @throws InterruptedException
+     * @throws java.io.IOException Indicates the camera driver failed to open.
      */
     public synchronized void openDriver(SurfaceHolder holder)
             throws IOException, InterruptedException {
@@ -236,18 +260,6 @@ public final class CameraManager {
         return framingRect;
     }
 
-    private static int findDesiredDimensionInRange(int resolution, int hardMin,
-                                                   int hardMax) {
-        int dim = 5 * resolution / 8; // Target 5/8 of each dimension
-        if (dim < hardMin) {
-            return hardMin;
-        }
-        if (dim > hardMax) {
-            return hardMax;
-        }
-        return dim;
-    }
-
     /**
      * Like {@link #getFramingRect} but coordinates are in terms of the preview
      * frame,
@@ -315,7 +327,7 @@ public final class CameraManager {
      * @return A PlanarYUVLuminanceSource instance.
      */
     public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data,
-                                                         int width, int height) {
+            int width, int height) {
         Rect rect = getFramingRectInPreview();
         if (rect == null) {
             return null;

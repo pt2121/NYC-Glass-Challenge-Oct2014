@@ -33,17 +33,35 @@ public final class BeepManager implements MediaPlayer.OnCompletionListener,
     private static final String TAG = BeepManager.class.getSimpleName();
 
     private static final float BEEP_VOLUME = 0.10f;
+
     private static final long VIBRATE_DURATION = 200L;
 
     private final Activity activity;
+
     private MediaPlayer mediaPlayer;
+
     private boolean playBeep;
+
     private boolean vibrate;
 
     public BeepManager(Activity activity) {
         this.activity = activity;
         this.mediaPlayer = null;
         updatePrefs();
+    }
+
+    private static boolean shouldBeep(SharedPreferences prefs, Context activity) {
+        // TODO: Make it configurable
+        boolean shouldPlayBeep = true;
+        if (shouldPlayBeep) {
+            // See if sound settings overrides this
+            AudioManager audioService = (AudioManager) activity
+                    .getSystemService(Context.AUDIO_SERVICE);
+            if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
+                shouldPlayBeep = false;
+            }
+        }
+        return shouldPlayBeep;
     }
 
     public synchronized void updatePrefs() {
@@ -68,20 +86,6 @@ public final class BeepManager implements MediaPlayer.OnCompletionListener,
                     .getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(VIBRATE_DURATION);
         }
-    }
-
-    private static boolean shouldBeep(SharedPreferences prefs, Context activity) {
-        // TODO: Make it configurable
-        boolean shouldPlayBeep = true;
-        if (shouldPlayBeep) {
-            // See if sound settings overrides this
-            AudioManager audioService = (AudioManager) activity
-                    .getSystemService(Context.AUDIO_SERVICE);
-            if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
-                shouldPlayBeep = false;
-            }
-        }
-        return shouldPlayBeep;
     }
 
     private MediaPlayer buildMediaPlayer(Context activity) {

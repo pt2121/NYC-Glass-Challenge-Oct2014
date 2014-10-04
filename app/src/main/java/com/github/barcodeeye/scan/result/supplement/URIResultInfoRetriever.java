@@ -33,6 +33,7 @@ final class URIResultInfoRetriever extends SupplementalInfoRetriever {
     private static final int MAX_REDIRECTS = 5;
 
     private final URIParsedResult result;
+
     private final String redirectString;
 
     URIResultInfoRetriever(TextView textView, URIParsedResult result, Context context) {

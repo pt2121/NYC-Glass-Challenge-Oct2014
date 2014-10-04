@@ -45,7 +45,9 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
     };
 
     private final String productID;
+
     private final String source;
+
     private final Context context;
 
     ProductResultInfoRetriever(TextView textView, String productID, Context context) {
@@ -53,6 +55,10 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
         this.productID = productID;
         this.source = context.getString(R.string.msg_google_product);
         this.context = context;
+    }
+
+    private static String unescapeHTML(String raw) {
+        return Html.fromHtml(raw).toString();
     }
 
     @Override
@@ -68,15 +74,12 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
             if (matcher.find()) {
                 append(productID,
                         source,
-                        new String[]{unescapeHTML(matcher.group(1)), unescapeHTML(matcher.group(2))},
+                        new String[]{unescapeHTML(matcher.group(1)),
+                                unescapeHTML(matcher.group(2))},
                         uri);
                 break;
             }
         }
-    }
-
-    private static String unescapeHTML(String raw) {
-        return Html.fromHtml(raw).toString();
     }
 
 }

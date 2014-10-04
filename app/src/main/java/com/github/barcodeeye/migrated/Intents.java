@@ -21,10 +21,12 @@ package com.github.barcodeeye.migrated;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class Intents {
+
     private Intents() {
     }
 
     public static final class Scan {
+
         /**
          * Send this intent to open the Barcodes app in scanning mode, find a
          * barcode, and return
@@ -88,6 +90,7 @@ public final class Intents {
          * You should specify both or neither, and pass the size as an int.
          */
         public static final String WIDTH = "SCAN_WIDTH";
+
         public static final String HEIGHT = "SCAN_HEIGHT";
 
         /**
@@ -156,7 +159,8 @@ public final class Intents {
          * Call {@link android.content.Intent#getStringExtra(String)} with
          * {@link #RESULT_ERROR_CORRECTION_LEVEL}.
          */
-        public static final String RESULT_ERROR_CORRECTION_LEVEL = "SCAN_RESULT_ERROR_CORRECTION_LEVEL";
+        public static final String RESULT_ERROR_CORRECTION_LEVEL
+                = "SCAN_RESULT_ERROR_CORRECTION_LEVEL";
 
         /**
          * Prefix for keys that map to the values of

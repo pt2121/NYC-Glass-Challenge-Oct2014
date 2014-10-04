@@ -59,6 +59,18 @@ import java.util.Map;
 public final class CaptureActivity extends BaseGlassActivity implements
         SurfaceHolder.Callback {
 
+    public static final String ITEM_TYPE = "ITEM_TYPE";
+
+    public static final String ITEM_PAPER = "ITEM_PAPER";
+
+    public static final String ITEM_PLASTIC = "ITEM_PLASTIC";
+
+    public static final String BIN_TYPE = "BIN_TYPE";
+
+    public static final String BIN_PAPER = "BIN_PAPER";
+
+    public static final String BIN_PLASTIC = "BIN_PLASTIC";
+
     private static final String IMAGE_PREFIX = "BarcodeEye_";
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
@@ -70,25 +82,72 @@ public final class CaptureActivity extends BaseGlassActivity implements
                     ResultMetadataType.POSSIBLE_COUNTRY);
 
     private CameraManager mCameraManager;
+
     private CaptureActivityHandler mHandler;
+
     private Result mSavedResultToShow;
+
     private ViewfinderView mViewfinderView;
+
     private boolean mHasSurface;
+
     private Map<DecodeHintType, ?> mDecodeHints;
+
     private InactivityTimer mInactivityTimer;
+
     private BeepManager mBeepManager;
+
     private AmbientLightManager mAmbientLightManager;
+
     private ImageManager mImageManager;
-    public static final String ITEM_TYPE = "ITEM_TYPE";
-    public static final String ITEM_PAPER = "ITEM_PAPER";
-    public static final String ITEM_PLASTIC = "ITEM_PLASTIC";
-    public static final String BIN_TYPE = "BIN_TYPE";
-    public static final String BIN_PAPER = "BIN_PAPER";
-    public static final String BIN_PLASTIC = "BIN_PLASTIC";
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, CaptureActivity.class);
         return intent;
+    }
+
+    /**
+     * Superimpose a line for 1D or dots for 2D to highlight the key features of
+     * the barcode.
+     *
+     * @param barcode     A bitmap of the captured image.
+     * @param scaleFactor amount by which thumbnail was scaled
+     * @param rawResult   The decoded results which contains the points to draw.
+     */
+    private static void drawResultPoints(Bitmap barcode, float scaleFactor,
+            Result rawResult, int color) {
+        ResultPoint[] points = rawResult.getResultPoints();
+        if (points != null && points.length > 0) {
+            Canvas canvas = new Canvas(barcode);
+            Paint paint = new Paint();
+            paint.setColor(color);
+            if (points.length == 2) {
+                paint.setStrokeWidth(4.0f);
+                drawLine(canvas, paint, points[0], points[1], scaleFactor);
+            } else if (points.length == 4
+                    && (rawResult.getBarcodeFormat() == BarcodeFormat.UPC_A || rawResult
+                    .getBarcodeFormat() == BarcodeFormat.EAN_13)) {
+                // Hacky special case -- draw two lines, for the barcode and metadata
+                drawLine(canvas, paint, points[0], points[1], scaleFactor);
+                drawLine(canvas, paint, points[2], points[3], scaleFactor);
+            } else {
+                paint.setStrokeWidth(10.0f);
+                for (ResultPoint point : points) {
+                    if (point != null) {
+                        canvas.drawPoint(scaleFactor * point.getX(),
+                                scaleFactor * point.getY(), paint);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void drawLine(Canvas canvas, Paint paint, ResultPoint a,
+            ResultPoint b, float scaleFactor) {
+        if (a != null && b != null) {
+            canvas.drawLine(scaleFactor * a.getX(), scaleFactor * a.getY(),
+                    scaleFactor * b.getX(), scaleFactor * b.getY(), paint);
+        }
     }
 
     public ViewfinderView getViewfinderView() {
@@ -215,7 +274,7 @@ public final class CaptureActivity extends BaseGlassActivity implements
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
-                               int height) {
+            int height) {
 
     }
 
@@ -238,50 +297,6 @@ public final class CaptureActivity extends BaseGlassActivity implements
         }
 
         handleDecodeInternally(rawResult, barcode);
-    }
-
-    /**
-     * Superimpose a line for 1D or dots for 2D to highlight the key features of
-     * the barcode.
-     *
-     * @param barcode     A bitmap of the captured image.
-     * @param scaleFactor amount by which thumbnail was scaled
-     * @param rawResult   The decoded results which contains the points to draw.
-     */
-    private static void drawResultPoints(Bitmap barcode, float scaleFactor,
-                                         Result rawResult, int color) {
-        ResultPoint[] points = rawResult.getResultPoints();
-        if (points != null && points.length > 0) {
-            Canvas canvas = new Canvas(barcode);
-            Paint paint = new Paint();
-            paint.setColor(color);
-            if (points.length == 2) {
-                paint.setStrokeWidth(4.0f);
-                drawLine(canvas, paint, points[0], points[1], scaleFactor);
-            } else if (points.length == 4
-                    && (rawResult.getBarcodeFormat() == BarcodeFormat.UPC_A || rawResult
-                    .getBarcodeFormat() == BarcodeFormat.EAN_13)) {
-                // Hacky special case -- draw two lines, for the barcode and metadata
-                drawLine(canvas, paint, points[0], points[1], scaleFactor);
-                drawLine(canvas, paint, points[2], points[3], scaleFactor);
-            } else {
-                paint.setStrokeWidth(10.0f);
-                for (ResultPoint point : points) {
-                    if (point != null) {
-                        canvas.drawPoint(scaleFactor * point.getX(),
-                                scaleFactor * point.getY(), paint);
-                    }
-                }
-            }
-        }
-    }
-
-    private static void drawLine(Canvas canvas, Paint paint, ResultPoint a,
-                                 ResultPoint b, float scaleFactor) {
-        if (a != null && b != null) {
-            canvas.drawLine(scaleFactor * a.getX(), scaleFactor * a.getY(),
-                    scaleFactor * b.getX(), scaleFactor * b.getY(), paint);
-        }
     }
 
     // TODO UI

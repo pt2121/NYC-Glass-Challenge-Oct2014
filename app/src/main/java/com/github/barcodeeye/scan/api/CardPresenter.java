@@ -17,23 +17,49 @@ import java.util.List;
 
 public class CardPresenter implements Parcelable {
 
+    public static final Creator<CardPresenter> CREATOR = new Creator<CardPresenter>() {
+        @Override
+        public CardPresenter createFromParcel(Parcel in) {
+            return new CardPresenter(in);
+        }
+
+        @Override
+        public CardPresenter[] newArray(int size) {
+            return new CardPresenter[size];
+        }
+    };
+
     private static final String TAG = CardPresenter.class.getSimpleName();
+
     private final List<Uri> mImages = new ArrayList<Uri>();
+
     private String mText;
+
     private String mFooter;
+
     private PendingIntent mPendingIntent;
 
     public CardPresenter() {
     }
 
     public CardPresenter(String text, String footer, PendingIntent intent,
-                         List<Uri> images) {
+            List<Uri> images) {
         mText = text;
         mFooter = footer;
         mPendingIntent = intent;
         if (images != null) {
             mImages.addAll(images);
         }
+    }
+
+    /* *********************************************************************
+     * Parcelable interface related methods
+     */
+    protected CardPresenter(Parcel in) {
+        in.readList(mImages, Uri.class.getClassLoader());
+        mText = in.readString();
+        mFooter = in.readString();
+        mPendingIntent = in.readParcelable(PendingIntent.class.getClassLoader());
     }
 
     public String getText() {
@@ -103,16 +129,6 @@ public class CardPresenter implements Parcelable {
         return card.getView();
     }
 
-    /* *********************************************************************
-     * Parcelable interface related methods
-     */
-    protected CardPresenter(Parcel in) {
-        in.readList(mImages, Uri.class.getClassLoader());
-        mText = in.readString();
-        mFooter = in.readString();
-        mPendingIntent = in.readParcelable(PendingIntent.class.getClassLoader());
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -125,16 +141,4 @@ public class CardPresenter implements Parcelable {
         dest.writeString(mFooter);
         dest.writeParcelable(mPendingIntent, 0);
     }
-
-    public static final Creator<CardPresenter> CREATOR = new Creator<CardPresenter>() {
-        @Override
-        public CardPresenter createFromParcel(Parcel in) {
-            return new CardPresenter(in);
-        }
-
-        @Override
-        public CardPresenter[] newArray(int size) {
-            return new CardPresenter[size];
-        }
-    };
 }

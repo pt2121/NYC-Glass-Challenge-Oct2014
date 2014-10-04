@@ -43,20 +43,33 @@ public final class ViewfinderView extends View {
 
     private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192,
             128, 64};
+
     private static final long ANIMATION_DELAY = 80L;
+
     private static final int CURRENT_POINT_OPACITY = 0xA0;
+
     private static final int MAX_RESULT_POINTS = 20;
+
     private static final int POINT_SIZE = 6;
 
-    private CameraManager cameraManager;
     private final Paint paint;
-    private Bitmap resultBitmap;
+
     private final int maskColor;
+
     private final int resultColor;
+
     private final int laserColor;
+
     private final int resultPointColor;
+
+    private CameraManager cameraManager;
+
+    private Bitmap resultBitmap;
+
     private int scannerAlpha;
+
     private List<ResultPoint> possibleResultPoints;
+
     private List<ResultPoint> lastPossibleResultPoints;
 
     // This constructor is used when the class is built from an XML resource.

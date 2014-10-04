@@ -19,6 +19,7 @@ import android.util.Log;
 public final class OpenCameraInterface {
 
     private static final String TAG = OpenCameraInterface.class.getName();
+
     private static final int MAX_WAIT_TIME = 1000;
 
     private OpenCameraInterface() {
@@ -27,8 +28,6 @@ public final class OpenCameraInterface {
     /**
      * Opens a rear-facing camera with {@link android.hardware.Camera#open(int)}, if one exists,
      * or opens camera 0.
-     *
-     * @throws InterruptedException
      */
     public static Camera open() throws InterruptedException {
 

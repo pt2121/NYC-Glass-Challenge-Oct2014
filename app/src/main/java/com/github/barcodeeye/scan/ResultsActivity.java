@@ -24,14 +24,36 @@ import java.util.List;
 public class ResultsActivity extends Activity {
 
     private static final String TAG = ResultsActivity.class.getSimpleName();
+
+    private final OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                long id) {
+            CardPresenter cardPresenter = mCardPresenters.get(position);
+            PendingIntent pendingIntent = cardPresenter.getPendingIntent();
+            if (pendingIntent != null) {
+                try {
+                    pendingIntent.send();
+                } catch (CanceledException e) {
+                    Log.w(TAG, e.getMessage());
+                }
+            } else {
+                Log.w(TAG, "No PendingIntent attached to card!");
+            }
+        }
+    };
+
     private static final String EXTRA_CARDS = "EXTRA_CARDS";
+
     private static final String EXTRA_IMAGE_URI = "EXTRA_IMAGE_URI";
 
     private final List<CardPresenter> mCardPresenters = new ArrayList<CardPresenter>();
+
     private CardScrollView mCardScrollView;
 
     public static Intent newIntent(Context context,
-                                   List<CardPresenter> cardResults) {
+            List<CardPresenter> cardResults) {
 
         Intent intent = new Intent(context, ResultsActivity.class);
         if (cardResults != null) {
@@ -82,10 +104,11 @@ public class ResultsActivity extends Activity {
     public static class CardScrollViewAdapter extends CardScrollAdapter {
 
         private final Context mContext;
+
         private final List<CardPresenter> mCardPresenters;
 
         public CardScrollViewAdapter(Context context,
-                                     List<CardPresenter> cardPresenter) {
+                List<CardPresenter> cardPresenter) {
             mContext = context;
             mCardPresenters = cardPresenter;
         }
@@ -111,23 +134,4 @@ public class ResultsActivity extends Activity {
             return mCardPresenters.indexOf(item);
         }
     }
-
-    private final OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            CardPresenter cardPresenter = mCardPresenters.get(position);
-            PendingIntent pendingIntent = cardPresenter.getPendingIntent();
-            if (pendingIntent != null) {
-                try {
-                    pendingIntent.send();
-                } catch (CanceledException e) {
-                    Log.w(TAG, e.getMessage());
-                }
-            } else {
-                Log.w(TAG, "No PendingIntent attached to card!");
-            }
-        }
-    };
 }

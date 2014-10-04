@@ -40,16 +40,52 @@ final class CameraConfigurationManager {
     // below will still select the default (presumably 320x240) size for these. This prevents
     // accidental selection of very low resolution on some devices.
     private static final int MIN_PREVIEW_PIXELS = 480 * 320; // normal screen
+
     //private static final float MAX_EXPOSURE_COMPENSATION = 1.5f;
     //private static final float MIN_EXPOSURE_COMPENSATION = 0.0f;
     private static final double MAX_ASPECT_DISTORTION = 0.15;
 
     private final Context context;
+
     private Point screenResolution;
+
     private Point cameraResolution;
 
     CameraConfigurationManager(Context context) {
         this.context = context;
+    }
+
+    /**
+     * See http://stackoverflow.com/a/19434459/552902
+     */
+    public static void googleGlassXE10WorkAround(Camera camera) {
+        Camera.Parameters params = camera.getParameters();
+        params.setPreviewFpsRange(30000, 30000);
+        params.setPreviewSize(640, 360);
+        //        if (params.isZoomSupported()) {
+        //            Log.v("@@@@@@@@@", "zoom is supported!");
+        //            Log.v("@@@@@@@@@", "zoom max: " + params.getMaxZoom());
+        //            params.setZoom(10);
+        //        } else {
+        //            Log.w("@@@@@@@@@", "zoom is NOT supported!");
+        //        }
+        camera.setParameters(params);
+    }
+
+    private static String findSettableValue(Collection<String> supportedValues,
+            String... desiredValues) {
+        Log.i(TAG, "Supported values: " + supportedValues);
+        String result = null;
+        if (supportedValues != null) {
+            for (String desiredValue : desiredValues) {
+                if (supportedValues.contains(desiredValue)) {
+                    result = desiredValue;
+                    break;
+                }
+            }
+        }
+        Log.i(TAG, "Settable value: " + result);
+        return result;
     }
 
     /**
@@ -113,7 +149,8 @@ final class CameraConfigurationManager {
         Camera.Parameters afterParameters = camera.getParameters();
         Camera.Size afterSize = afterParameters.getPreviewSize();
         if (afterSize != null
-                && (cameraResolution.x != afterSize.width || cameraResolution.y != afterSize.height)) {
+                && (cameraResolution.x != afterSize.width
+                || cameraResolution.y != afterSize.height)) {
             Log.w(TAG, "Camera said it supported preview size "
                     + cameraResolution.x + 'x' + cameraResolution.y
                     + ", but after setting it, preview size is "
@@ -121,25 +158,6 @@ final class CameraConfigurationManager {
             cameraResolution.x = afterSize.width;
             cameraResolution.y = afterSize.height;
         }
-    }
-
-    /**
-     * See http://stackoverflow.com/a/19434459/552902
-     *
-     * @param mCamera
-     */
-    public static void googleGlassXE10WorkAround(Camera camera) {
-        Camera.Parameters params = camera.getParameters();
-        params.setPreviewFpsRange(30000, 30000);
-        params.setPreviewSize(640, 360);
-        //        if (params.isZoomSupported()) {
-        //            Log.v("@@@@@@@@@", "zoom is supported!");
-        //            Log.v("@@@@@@@@@", "zoom max: " + params.getMaxZoom());
-        //            params.setZoom(10);
-        //        } else {
-        //            Log.w("@@@@@@@@@", "zoom is NOT supported!");
-        //        }
-        camera.setParameters(params);
     }
 
     Point getCameraResolution() {
@@ -156,7 +174,8 @@ final class CameraConfigurationManager {
             if (parameters != null) {
                 String flashMode = camera.getParameters().getFlashMode();
                 return flashMode != null
-                        && (Camera.Parameters.FLASH_MODE_ON.equals(flashMode) || Camera.Parameters.FLASH_MODE_TORCH
+                        && (Camera.Parameters.FLASH_MODE_ON.equals(flashMode)
+                        || Camera.Parameters.FLASH_MODE_TORCH
                         .equals(flashMode));
             }
         }
@@ -171,7 +190,7 @@ final class CameraConfigurationManager {
     }
 
     private void doSetTorch(Camera.Parameters parameters, boolean newSetting,
-                            boolean safeMode) {
+            boolean safeMode) {
         String flashMode;
         if (newSetting) {
             flashMode = findSettableValue(parameters.getSupportedFlashModes(),
@@ -217,7 +236,7 @@ final class CameraConfigurationManager {
     }
 
     private Point findBestPreviewSizeValue(Camera.Parameters parameters,
-                                           Point screenResolution) {
+            Point screenResolution) {
 
         List<Camera.Size> rawSupportedSizes = parameters
                 .getSupportedPreviewSizes();
@@ -309,22 +328,6 @@ final class CameraConfigurationManager {
                 defaultPreview.height);
         Log.i(TAG, "No suitable preview sizes, using default: " + defaultSize);
         return defaultSize;
-    }
-
-    private static String findSettableValue(Collection<String> supportedValues,
-                                            String... desiredValues) {
-        Log.i(TAG, "Supported values: " + supportedValues);
-        String result = null;
-        if (supportedValues != null) {
-            for (String desiredValue : desiredValues) {
-                if (supportedValues.contains(desiredValue)) {
-                    result = desiredValue;
-                    break;
-                }
-            }
-        }
-        Log.i(TAG, "Settable value: " + result);
-        return result;
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public class UriResultProcessor extends ResultProcessor<URIParsedResult> {
 
     public UriResultProcessor(Context context, URIParsedResult parsedResult,
-                              Result result, Uri photoUri) {
+            Result result, Uri photoUri) {
         super(context, parsedResult, result, photoUri);
     }
 
@@ -29,7 +29,6 @@ public class UriResultProcessor extends ResultProcessor<URIParsedResult> {
         CardPresenter cardPresenter = new CardPresenter()
                 .setText("Open in Browser")
                 .setFooter(parsedResult.getDisplayResult());
-
 
         if (getPhotoUri() != null) {
             cardPresenter.addImage(getPhotoUri());

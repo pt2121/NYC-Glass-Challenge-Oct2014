@@ -124,7 +124,8 @@ public final class DecodeHintManager {
         // Extract parameters
         Map<String, String> parameters = splitQuery(query);
 
-        Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
+        Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType, Object>(
+                DecodeHintType.class);
 
         for (DecodeHintType hintType : DecodeHintType.values()) {
 
@@ -173,7 +174,8 @@ public final class DecodeHintManager {
             if (hintType.getValueType().equals(int[].class)) {
                 // An integer array. Used to specify valid lengths.
                 // Strip a trailing comma as in Java style array initialisers.
-                if (!parameterText.isEmpty() && parameterText.charAt(parameterText.length() - 1) == ',') {
+                if (!parameterText.isEmpty()
+                        && parameterText.charAt(parameterText.length() - 1) == ',') {
                     parameterText = parameterText.substring(0, parameterText.length() - 1);
                 }
                 String[] values = COMMA.split(parameterText);
@@ -182,7 +184,8 @@ public final class DecodeHintManager {
                     try {
                         array[i] = Integer.parseInt(values[i]);
                     } catch (NumberFormatException ignored) {
-                        Log.w(TAG, "Skipping array of integers hint " + hintType + " due to invalid numeric value: '" + values[i] + '\'');
+                        Log.w(TAG, "Skipping array of integers hint " + hintType
+                                + " due to invalid numeric value: '" + values[i] + '\'');
                         array = null;
                         break;
                     }
@@ -192,7 +195,8 @@ public final class DecodeHintManager {
                 }
                 continue;
             }
-            Log.w(TAG, "Unsupported hint type '" + hintType + "' of type " + hintType.getValueType());
+            Log.w(TAG,
+                    "Unsupported hint type '" + hintType + "' of type " + hintType.getValueType());
         }
 
         Log.i(TAG, "Hints from the URI: " + hints);
@@ -204,7 +208,8 @@ public final class DecodeHintManager {
         if (extras == null || extras.isEmpty()) {
             return null;
         }
-        Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
+        Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType, Object>(
+                DecodeHintType.class);
 
         for (DecodeHintType hintType : DecodeHintType.values()) {
 
@@ -224,7 +229,9 @@ public final class DecodeHintManager {
                     if (hintType.getValueType().isInstance(hintData)) {
                         hints.put(hintType, hintData);
                     } else {
-                        Log.w(TAG, "Ignoring hint " + hintType + " because it is not assignable from " + hintData);
+                        Log.w(TAG,
+                                "Ignoring hint " + hintType + " because it is not assignable from "
+                                        + hintData);
                     }
                 }
             }

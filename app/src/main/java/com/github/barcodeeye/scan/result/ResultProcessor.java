@@ -16,17 +16,26 @@ import java.util.List;
  * @author javier.romero
  */
 public abstract class ResultProcessor<T extends ParsedResult> {
+
     private final Context mContext;
+
     private final T mParsedResult;
+
     private final Result mRawResult;
+
     private final Uri mPhotoUri;
 
     public ResultProcessor(Context context, T parsedResult,
-                           Result result, Uri photoUri) {
+            Result result, Uri photoUri) {
         mContext = context;
         mParsedResult = parsedResult;
         mRawResult = result;
         mPhotoUri = photoUri;
+    }
+
+    public static PendingIntent createPendingIntent(Context context,
+            Intent intent) {
+        return PendingIntent.getActivity(context, 0, intent, 0);
     }
 
     public Context getContext() {
@@ -46,9 +55,4 @@ public abstract class ResultProcessor<T extends ParsedResult> {
     }
 
     public abstract List<CardPresenter> getCardResults();
-
-    public static PendingIntent createPendingIntent(Context context,
-                                                    Intent intent) {
-        return PendingIntent.getActivity(context, 0, intent, 0);
-    }
 }
