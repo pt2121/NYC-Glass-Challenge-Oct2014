@@ -1,6 +1,6 @@
 package com.intellibins.glassware;
 
-import com.intellibins.glassware.model.Bin;
+import com.intellibins.glassware.model.Loc;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,11 +11,11 @@ import java.util.List;
  */
 public class Utils {
 
-    public static List<Bin> sortBins(List<Bin> bins, final double myLatitude,
+    public static List<Loc> sortBins(List<Loc> locs, final double myLatitude,
             final double myLongitude) {
-        Comparator<Bin> comp = new Comparator<Bin>() {
+        Comparator<Loc> comp = new Comparator<Loc>() {
             @Override
-            public int compare(Bin b1, Bin b2) {
+            public int compare(Loc b1, Loc b2) {
                 float[] result1 = new float[3];
                 android.location.Location
                         .distanceBetween(myLatitude, myLongitude, b1.latitude, b1.longitude,
@@ -31,8 +31,8 @@ public class Utils {
                 return distance1.compareTo(distance2);
             }
         };
-        Collections.sort(bins, comp);
-        return bins;
+        Collections.sort(locs, comp);
+        return locs;
     }
 
 }

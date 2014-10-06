@@ -6,13 +6,13 @@ import android.content.res.Resources
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.intellibins.glassware.R
-import com.intellibins.glassware.model.Bin
+import com.intellibins.glassware.model.Loc
 import com.intellibins.glassware.model.nyc.BinData
 import rx.Observable
 import rx.Subscriber
 import rx.observables.StringObservable
 
-class NycBinLocation implements IBinLocation {
+class NycBinLocation implements IFindBin {
 
     private Application mApp
 
@@ -41,15 +41,15 @@ class NycBinLocation implements IBinLocation {
         }
     }
 
-    private Observable<Bin> makeBins(final BinData binData) {
+    private Observable<Loc> makeBins(final BinData binData) {
         Observable.create({
-            Subscriber<Bin> subscriber ->
+            Subscriber<Loc> subscriber ->
                 Thread.start({
                     List<List<String>> lists = binData.getData()
                     lists.each { ls ->
                         try {
                             int len = ls.size()
-                            Bin bin = new Bin.Builder(ls.get(len - 4))
+                            Loc bin = new Loc.Builder(ls.get(len - 4))
                                     .address(ls.get(len - 3))
                                     .latitude(Double.parseDouble(ls.get(len - 2)))
                                     .longitude(Double.parseDouble(ls.get(len - 1)))
@@ -61,11 +61,11 @@ class NycBinLocation implements IBinLocation {
                     }
                     subscriber.onCompleted()
                 })
-        } as Observable.OnSubscribe<Bin>)
+        } as Observable.OnSubscribe<Loc>)
     }
 
     @Override
-    Observable<Bin> getBins() {
+    Observable<Loc> getLocs() {
         getJsonText(mApp.getApplicationContext())
                 .flatMap({ String jsonText -> parseJson(jsonText) })
                 .flatMap({ BinData binData -> makeBins(binData) })
