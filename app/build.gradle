@@ -9,9 +9,16 @@ repositories {
 }
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'intellibins'
+            keyPassword 'hackathon'
+            storeFile file('/Users/prt2121/Downloads/intellibins-for-glass/intellibins.jks')
+            storePassword 'hackathon'
+        }
+    }
     compileSdkVersion "Google Inc.:Glass Development Kit Preview:19"
     buildToolsVersion "20.0.0"
-
     defaultConfig {
         applicationId "com.intellibins.glassware"
         minSdkVersion 19
@@ -23,6 +30,9 @@ android {
         release {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
@@ -42,4 +52,5 @@ dependencies {
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
     compile 'com.github.prt2121:ProgressBar:1.0@aar'
     compile 'com.google.zxing:core:3.1.0'
+    compile 'com.squareup.retrofit:retrofit:1.6.1'
 }

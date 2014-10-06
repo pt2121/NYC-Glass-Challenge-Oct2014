@@ -2,6 +2,7 @@ package com.intellibins.glassware;
 
 import com.intellibins.glassware.binlocation.BinLocationModule;
 import com.intellibins.glassware.dropofflocation.DropOffLocationModule;
+import com.intellibins.glassware.storelocation.PlaceApiModule;
 import com.intellibins.glassware.userlocation.UserLocationModule;
 
 import android.app.Application;
@@ -31,6 +32,7 @@ public class IntellibinsApp extends Application {
     private void buildObjectGraphAndInject() {
         graph = ObjectGraph.create(new IntellibinsModule(this),
                 new BinLocationModule(this),
+                new PlaceApiModule(),
                 new DropOffLocationModule(),
                 new UserLocationModule(this));
     }

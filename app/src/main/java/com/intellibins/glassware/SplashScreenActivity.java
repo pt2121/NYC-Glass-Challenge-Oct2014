@@ -3,6 +3,9 @@ package com.intellibins.glassware;
 import com.intellibins.glassware.binlocation.IFindBin;
 import com.intellibins.glassware.dropofflocation.IFindDropOff;
 import com.intellibins.glassware.model.Loc;
+import com.intellibins.glassware.storelocation.GooglePlaceService;
+import com.intellibins.glassware.storelocation.model.Place;
+import com.intellibins.glassware.storelocation.model.Result;
 import com.intellibins.glassware.userlocation.IUserLocation;
 import com.intellibins.glassware.view.TuggableView;
 import com.prt2121.glass.widget.SliderView;
@@ -17,12 +20,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import retrofit.RestAdapter;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 public class SplashScreenActivity extends BaseGlassActivity {
@@ -37,6 +40,9 @@ public class SplashScreenActivity extends BaseGlassActivity {
 
     @Inject
     IFindDropOff mDropOffLocation;
+
+    @Inject
+    RestAdapter mRestAdapter;
 
     // wish Java supports currying :)
     Func1<Location, Observable<List<Loc>>> findClosestBins
@@ -94,6 +100,26 @@ public class SplashScreenActivity extends BaseGlassActivity {
                     public void call(List<Loc> locs) {
                         for (Loc loc : locs) {
                             Log.d(TAG, "drop-off " + loc.address);
+                        }
+                    }
+                });
+
+        userLocation.flatMap(new Func1<Location, Observable<Place>>() {
+            @Override
+            public Observable<Place> call(Location location) {
+                return mRestAdapter.create(GooglePlaceService.class)
+                        .listPlaces(location.getLatitude() + "," + location.getLongitude());
+            }
+        })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Place>() {
+                    @Override
+                    public void call(Place place) {
+                        List<Result> results = place.getResults();
+                        Log.d(TAG, "places size " + results.size());
+                        for (Result result : results) {
+                            Log.d(TAG, "place " + result.getName());
                         }
                     }
                 });

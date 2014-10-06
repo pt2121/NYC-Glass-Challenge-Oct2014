@@ -82,16 +82,17 @@
     <orderEntry type="jdk" jdkName="Android 4.4.2 Glass Development Kit Preview" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="guava-15.0" level="project" />
-    <orderEntry type="library" exported="" name="rxjava-string-0.20.4" level="project" />
     <orderEntry type="library" exported="" name="dagger-1.2.2" level="project" />
     <orderEntry type="library" exported="" name="ProgressBar-1.0" level="project" />
-    <orderEntry type="library" exported="" name="javax.inject-1" level="project" />
     <orderEntry type="library" exported="" name="core-3.1.0" level="project" />
-    <orderEntry type="library" exported="" name="rxjava-core-0.20.4" level="project" />
     <orderEntry type="library" exported="" name="dagger-compiler-1.2.2" level="project" />
+    <orderEntry type="library" exported="" name="retrofit-1.6.1" level="project" />
+    <orderEntry type="library" exported="" name="rxjava-string-0.20.4" level="project" />
+    <orderEntry type="library" exported="" name="javax.inject-1" level="project" />
+    <orderEntry type="library" exported="" name="rxjava-core-0.20.4" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3" level="project" />
-    <orderEntry type="library" exported="" name="groovy-2.4.0-beta-1-grooid" level="project" />
     <orderEntry type="library" exported="" name="rxjava-android-0.20.4" level="project" />
+    <orderEntry type="library" exported="" name="groovy-2.4.0-beta-1-grooid" level="project" />
     <orderEntry type="library" exported="" name="javawriter-2.5.0" level="project" />
   </component>
 </module>
