@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import com.intellibins.glassware.R;
-import com.intellibins.glassware.model.Bin;
+import com.intellibins.glassware.model.Loc;
 import com.intellibins.glassware.model.nyc.BinData;
 
 import android.app.Application;
@@ -22,7 +22,7 @@ import rx.functions.Func1;
 /**
  * Created by prt2121 on 9/27/14.
  */
-public class NycBinLocation_java implements IBinLocation {
+public class NycBinLocation_java implements IFindBin {
 
     private static final String TAG = NycBinLocation_java.class.getSimpleName();
 
@@ -50,10 +50,10 @@ public class NycBinLocation_java implements IBinLocation {
         }
     }
 
-    private Observable<Bin> makeBins(final BinData binData) {
-        return Observable.create(new Observable.OnSubscribe<Bin>() {
+    private Observable<Loc> makeBins(final BinData binData) {
+        return Observable.create(new Observable.OnSubscribe<Loc>() {
             @Override
-            public void call(final Subscriber<? super Bin> subscriber) {
+            public void call(final Subscriber<? super Loc> subscriber) {
                 final Thread t = new Thread(new Runnable() {
 
                     @Override
@@ -62,12 +62,12 @@ public class NycBinLocation_java implements IBinLocation {
                         for (List<String> strings : lists) {
                             try {
                                 int len = strings.size();
-                                Bin bin = new Bin.Builder(strings.get(len - 4))
+                                Loc loc = new Loc.Builder(strings.get(len - 4))
                                         .address(strings.get(len - 3))
                                         .latitude(Double.parseDouble(strings.get(len - 2)))
                                         .longitude(Double.parseDouble(strings.get(len - 1)))
                                         .build();
-                                subscriber.onNext(bin);
+                                subscriber.onNext(loc);
                             } catch (Exception ex) {
                                 Log.e(TAG, "#makeBins " + strings.toString());
                                 Log.e(TAG, ex.toString());
@@ -82,16 +82,16 @@ public class NycBinLocation_java implements IBinLocation {
     }
 
     @Override
-    public Observable<Bin> getBins() {
+    public Observable<Loc> getLocs() {
         return getJsonText(mApp.getApplicationContext())
                 .map(new Func1<String, BinData>() {
                     @Override
                     public BinData call(String jsonString) {
                         return parseJson(jsonString);
                     }
-                }).flatMap(new Func1<BinData, Observable<Bin>>() {
+                }).flatMap(new Func1<BinData, Observable<Loc>>() {
                     @Override
-                    public Observable<Bin> call(BinData binData) {
+                    public Observable<Loc> call(BinData binData) {
                         return makeBins(binData);
                     }
                 });

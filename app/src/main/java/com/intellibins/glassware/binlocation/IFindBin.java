@@ -1,14 +1,14 @@
 package com.intellibins.glassware.binlocation;
 
-import com.intellibins.glassware.model.Bin;
+import com.intellibins.glassware.model.Loc;
 
 import rx.Observable;
 
 /**
  * Created by prt2121 on 9/28/14.
  */
-public interface IBinLocation {
+public interface IFindBin {
 
-    public Observable<Bin> getBins();
+    public Observable<Loc> getLocs();
 
 }

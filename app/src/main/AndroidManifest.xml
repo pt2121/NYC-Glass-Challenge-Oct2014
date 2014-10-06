@@ -19,7 +19,7 @@
             android:name="com.intellibins.glassware.MenuActivity"
             android:icon="@drawable/ic_glass_logo"
             android:label="@string/title_activity_menu" />
-        
+
         <activity
             android:name="com.intellibins.glassware.SplashScreenActivity"
             android:label="@string/title_activity_splash_screen">

@@ -1,8 +1,8 @@
 package com.intellibins.glassware;
 
-import com.intellibins.glassware.binlocation.BinLocationUtils;
-import com.intellibins.glassware.binlocation.IBinLocation;
-import com.intellibins.glassware.model.Bin;
+import com.intellibins.glassware.binlocation.IFindBin;
+import com.intellibins.glassware.dropofflocation.IFindDropOff;
+import com.intellibins.glassware.model.Loc;
 import com.intellibins.glassware.userlocation.IUserLocation;
 import com.intellibins.glassware.view.TuggableView;
 import com.prt2121.glass.widget.SliderView;
@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 public class SplashScreenActivity extends BaseGlassActivity {
@@ -28,21 +30,37 @@ public class SplashScreenActivity extends BaseGlassActivity {
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
 
     @Inject
-    IBinLocation mBinLocation;
+    IFindBin mBinLocation;
 
     @Inject
     IUserLocation mUserLocation;
 
-    Func1<Location, Observable<List<Bin>>> findClosestBins
-            = new Func1<Location, Observable<List<Bin>>>() {
+    @Inject
+    IFindDropOff mDropOffLocation;
+
+    // wish Java supports currying :)
+    Func1<Location, Observable<List<Loc>>> findClosestBins
+            = new Func1<Location, Observable<List<Loc>>>() {
         @Override
-        public Observable<List<Bin>> call(Location location) {
-            return mBinLocation.getBins()
+        public Observable<List<Loc>> call(Location location) {
+            return mBinLocation.getLocs()
                     .toSortedList(
-                            new BinLocationUtils()
+                            new LocUtils()
                                     .compare(location.getLatitude(), location.getLongitude()));
         }
     };
+
+    Func1<Location, Observable<List<Loc>>> findClosestDropOffs
+            = new Func1<Location, Observable<List<Loc>>>() {
+        @Override
+        public Observable<List<Loc>> call(Location location) {
+            return mDropOffLocation.getLocs()
+                    .toSortedList(
+                            new LocUtils()
+                                    .compare(location.getLatitude(), location.getLongitude()));
+        }
+    };
+
 
     private TuggableView mTuggableView;
 
@@ -65,22 +83,36 @@ public class SplashScreenActivity extends BaseGlassActivity {
     }
 
     private void getNearestBinThenFinish() {
-        mSubscription = mUserLocation.observe()
-                .take(1)
-                .flatMap(findClosestBins)
-                .flatMap(new Func1<List<Bin>, Observable<Bin>>() {
+        Observable<Location> userLocation = mUserLocation.observe()
+                .take(1);
+
+        userLocation.flatMap(findClosestDropOffs)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<Loc>>() {
                     @Override
-                    public Observable<Bin> call(List<Bin> bins) {
-                        return Observable.from(bins);
+                    public void call(List<Loc> locs) {
+                        for (Loc loc : locs) {
+                            Log.d(TAG, "drop-off " + loc.address);
+                        }
+                    }
+                });
+
+        mSubscription = userLocation
+                .flatMap(findClosestBins)
+                .flatMap(new Func1<List<Loc>, Observable<Loc>>() {
+                    @Override
+                    public Observable<Loc> call(List<Loc> locs) {
+                        return Observable.from(locs);
                     }
                 })
                 .take(5)
                 .toList()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Bin>>() {
+                .subscribe(new Action1<List<Loc>>() {
                     @Override
-                    public void call(List<Bin> bins) {
+                    public void call(List<Loc> locs) {
                         new Handler().post(new Runnable() {
                             @Override
                             public void run() {
@@ -89,6 +121,9 @@ public class SplashScreenActivity extends BaseGlassActivity {
                             }
                         });
                         SplashScreenActivity.this.finish();
+                        for (Loc loc : locs) {
+                            Log.d(TAG, "loc " + loc.name);
+                        }
                     }
                 });
     }

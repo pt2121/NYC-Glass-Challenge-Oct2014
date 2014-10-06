@@ -3,7 +3,7 @@ package com.intellibins.glassware.model;
 /**
  * Created by prt2121 on 9/27/14.
  */
-public class Bin {
+public class Loc {
 
     public final String name;
 
@@ -13,7 +13,7 @@ public class Bin {
 
     public final double longitude;
 
-    public Bin(String name, String address, double latitude, double longitude) {
+    public Loc(String name, String address, double latitude, double longitude) {
         this.name = name;
         this.address = address;
         this.latitude = latitude;
@@ -49,8 +49,8 @@ public class Bin {
             return this;
         }
 
-        public Bin build() {
-            return new Bin(this.name, this.address, this.latitude, this.longitude);
+        public Loc build() {
+            return new Loc(this.name, this.address, this.latitude, this.longitude);
         }
     }
 }

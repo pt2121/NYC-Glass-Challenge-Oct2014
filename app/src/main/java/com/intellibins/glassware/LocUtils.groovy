@@ -1,25 +1,25 @@
-package com.intellibins.glassware.binlocation
+package com.intellibins.glassware
 
 import android.location.Location
-import com.intellibins.glassware.model.Bin
+import com.intellibins.glassware.model.Loc
 import rx.functions.Func2
 
-class BinLocationUtils {
+class LocUtils {
 
     double myLatitude
 
     double myLongitude
 
-    Func2<Bin, Bin, Integer> compare(double lat, double lng) {
+    Func2<Loc, Loc, Integer> compare(double lat, double lng) {
         myLatitude = lat
         myLongitude = lng
         f
     }
 
-    def f = new Func2<Bin, Bin, Integer>() {
+    def f = new Func2<Loc, Loc, Integer>() {
 
         @Override
-        public Integer call(Bin b1, Bin b2) {
+        public Integer call(Loc b1, Loc b2) {
             float[] result1 = new float[3]
             Location.distanceBetween(myLatitude, myLongitude, b1.latitude, b1.longitude, result1)
             Float distance1 = result1[0]
