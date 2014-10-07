@@ -15,6 +15,8 @@ import rx.Observable;
 public interface GooglePlaceService {
 
     // TODO add API KEY
-    @GET("/maps/api/place/nearbysearch/json?keyword=convenience%20store&rankby=distance&key=")
-    Observable<Place> listPlaces(@Query("location") String location);
+    @GET("/maps/api/place/nearbysearch/json?keyword=convenience%20store&rankby=distance")
+    Observable<Place> getPlaces(@Query("location") String location,
+            @Query("key") String key);
+
 }
