@@ -22,7 +22,7 @@ public final class PlaceApiModule {
     @Singleton
     RestAdapter provideRestAdapter() {
         return new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint("https://maps.googleapis.com")
                 .build();
     }
