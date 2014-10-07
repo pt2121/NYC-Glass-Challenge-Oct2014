@@ -1,6 +1,6 @@
 package com.intellibins.glassware.dropofflocation;
 
-import com.intellibins.glassware.SplashScreenActivity;
+import com.intellibins.glassware.DataService;
 
 import dagger.Module;
 import dagger.Provides;
@@ -10,7 +10,7 @@ import dagger.Provides;
  */
 @Module(
         complete = false,
-        injects = SplashScreenActivity.class,
+        injects = DataService.class,
         library = true
 )
 public class DropOffLocationModule {

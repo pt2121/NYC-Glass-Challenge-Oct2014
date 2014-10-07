@@ -1,6 +1,6 @@
 package com.intellibins.glassware.storelocation;
 
-import com.intellibins.glassware.SplashScreenActivity;
+import com.intellibins.glassware.DataService;
 
 import javax.inject.Singleton;
 
@@ -13,7 +13,7 @@ import retrofit.RestAdapter;
  */
 @Module(
         complete = false,
-        injects = SplashScreenActivity.class,
+        injects = DataService.class,
         library = true
 )
 public final class PlaceApiModule {

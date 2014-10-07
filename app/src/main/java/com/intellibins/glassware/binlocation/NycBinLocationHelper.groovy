@@ -12,11 +12,11 @@ import rx.Observable
 import rx.Subscriber
 import rx.observables.StringObservable
 
-class NycBinLocation implements IFindBin {
+class NycBinLocationHelper implements IFindBin {
 
     private Application mApp
 
-    NycBinLocation(Application app) {
+    NycBinLocationHelper(Application app) {
         mApp = app
     }
 
@@ -56,7 +56,7 @@ class NycBinLocation implements IFindBin {
                                     .build()
                             subscriber.onNext(bin)
                         } catch (Exception ex) {
-                            Log.e(NycBinLocation.getSimpleName(), ex.toString())
+                            Log.e(NycBinLocationHelper.getSimpleName(), ex.toString())
                         }
                     }
                     subscriber.onCompleted()
