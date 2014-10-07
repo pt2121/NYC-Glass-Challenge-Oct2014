@@ -32,3 +32,4 @@ proguard/
 .idea/
 
 intellibins.jks
+app/src/main/java/com/intellibins/glassware/storelocation/GooglePlaceService.java
