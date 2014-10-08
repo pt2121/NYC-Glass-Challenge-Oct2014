@@ -13,6 +13,7 @@
 
 package com.intellibins.glassware;
 
+import com.google.android.glass.view.WindowUtils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
@@ -39,8 +40,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.Window;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -165,6 +169,7 @@ public final class CaptureActivity extends BaseGlassActivity implements
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         setContentView(R.layout.activity_capture);
 
         mImageManager = new ImageManager(this);
@@ -364,5 +369,38 @@ public final class CaptureActivity extends BaseGlassActivity implements
 
     public void drawViewfinder() {
         mViewfinderView.drawViewfinder();
+    }
+
+    @Override
+    public boolean onCreatePanelMenu(int featureId, Menu menu) {
+        if (featureId == WindowUtils.FEATURE_VOICE_COMMANDS ||
+                featureId == Window.FEATURE_OPTIONS_PANEL) {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            return true;
+        }
+        return super.onCreatePanelMenu(featureId, menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if (featureId == WindowUtils.FEATURE_VOICE_COMMANDS ||
+                featureId == Window.FEATURE_OPTIONS_PANEL) {
+            switch (item.getItemId()) {
+                case R.id.plastic_menu_item:
+                    break;
+                case R.id.paper_menu_item:
+                    break;
+                default:
+                    return true;
+            }
+            return true;
+        }
+        return super.onMenuItemSelected(featureId, item);
     }
 }

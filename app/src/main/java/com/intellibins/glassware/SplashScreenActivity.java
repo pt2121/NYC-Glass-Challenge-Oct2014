@@ -18,7 +18,7 @@ public class SplashScreenActivity extends BaseGlassActivity {
         setContentView(mTuggableView);
         SliderView slider = (SliderView) mTuggableView.findViewById(R.id.progressBar);
         // TODO
-        slider.startProgress(20000, new Animator.AnimatorListener() {
+        slider.startProgress(5000, new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -26,7 +26,7 @@ public class SplashScreenActivity extends BaseGlassActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                startActivity(new Intent(SplashScreenActivity.this, MenuActivity.class));
+                startActivity(new Intent(SplashScreenActivity.this, CaptureActivity.class));
                 finish();
             }
 
