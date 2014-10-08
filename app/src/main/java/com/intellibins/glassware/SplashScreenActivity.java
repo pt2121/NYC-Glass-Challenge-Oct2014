@@ -14,11 +14,11 @@ public class SplashScreenActivity extends BaseGlassActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTuggableView = new TuggableView(this, R.layout.activity_splash_screen);
+        mTuggableView = new TuggableView(this, R.layout.activity_loading);
         setContentView(mTuggableView);
         SliderView slider = (SliderView) mTuggableView.findViewById(R.id.progressBar);
         // TODO
-        slider.startProgress(5000, new Animator.AnimatorListener() {
+        slider.startProgress(4000, new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 

@@ -89,9 +89,7 @@ public class MenuActivity extends BaseGlassActivity {
         if (featureId == WindowUtils.FEATURE_VOICE_COMMANDS ||
                 featureId == Window.FEATURE_OPTIONS_PANEL) {
             switch (item.getItemId()) {
-                case R.id.plastic_menu_item:
-                    break;
-                case R.id.paper_menu_item:
+                case R.id.special_waste_menu_item:
                     break;
                 default:
                     return true;

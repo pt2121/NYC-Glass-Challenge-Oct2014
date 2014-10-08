@@ -47,8 +47,8 @@ public class DataService extends Service {
     @Inject
     IUserLocation mUserLocation;
 
-    @Inject
-    IFindDropOff mDropOffLocation;
+//    @Inject
+//    IFindDropOff mDropOffLocation;
 
     @Inject
     RestAdapter mRestAdapter;
@@ -65,16 +65,16 @@ public class DataService extends Service {
         }
     };
 
-    Func1<Location, Observable<List<Loc>>> findClosestDropOffs
-            = new Func1<Location, Observable<List<Loc>>>() {
-        @Override
-        public Observable<List<Loc>> call(Location location) {
-            return mDropOffLocation.getLocs()
-                    .toSortedList(
-                            new LocUtils()
-                                    .compare(location.getLatitude(), location.getLongitude()));
-        }
-    };
+//    Func1<Location, Observable<List<Loc>>> findClosestDropOffs
+//            = new Func1<Location, Observable<List<Loc>>>() {
+//        @Override
+//        public Observable<List<Loc>> call(Location location) {
+//            return mDropOffLocation.getLocs()
+//                    .toSortedList(
+//                            new LocUtils()
+//                                    .compare(location.getLatitude(), location.getLongitude()));
+//        }
+//    };
 
     private Subscription mSubscription;
 
@@ -119,17 +119,17 @@ public class DataService extends Service {
         Observable<Location> userLocation = mUserLocation.observe()
                 .take(1);
 
-        userLocation.flatMap(findClosestDropOffs)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Loc>>() {
-                    @Override
-                    public void call(List<Loc> locs) {
-                        for (Loc loc : locs) {
-                            Log.d(TAG, "drop-off : " + loc.address);
-                        }
-                    }
-                });
+//        userLocation.flatMap(findClosestDropOffs)
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<List<Loc>>() {
+//                    @Override
+//                    public void call(List<Loc> locs) {
+//                        for (Loc loc : locs) {
+//                            Log.d(TAG, "drop-off : " + loc.address);
+//                        }
+//                    }
+//                });
 
         Observable<Loc> storeLoc = userLocation.flatMap(new Func1<Location, Observable<Place>>() {
             @Override
@@ -180,6 +180,7 @@ public class DataService extends Service {
                 .subscribe(new Action1<List<Loc>>() {
                     @Override
                     public void call(List<Loc> locs) {
+                        Log.d(TAG, "DataEvent locs.size " + locs.size());
                         EventBus.getDefault().postSticky(new DataEvent(locs));
                         stopSelf();
                     }

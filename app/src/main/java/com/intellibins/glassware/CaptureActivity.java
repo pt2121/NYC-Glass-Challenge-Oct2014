@@ -309,6 +309,7 @@ public final class CaptureActivity extends BaseGlassActivity implements
     private void handleDecodeInternally(Result rawResult, Bitmap barcode) {
         String text = rawResult.getText();
         Log.v(TAG, "text " + text);
+        // TODO
 //        if(text.toLowerCase().contains("bin")) {
 //            Intent intent = new Intent(this, BinActivity.class);
 //            intent.putExtra(BIN_TYPE, text);
@@ -393,8 +394,9 @@ public final class CaptureActivity extends BaseGlassActivity implements
                 featureId == Window.FEATURE_OPTIONS_PANEL) {
             switch (item.getItemId()) {
                 case R.id.plastic_menu_item:
+                    startActivity(new Intent(this, ResultActivity.class));
                     break;
-                case R.id.paper_menu_item:
+                case R.id.special_waste_menu_item:
                     break;
                 default:
                     return true;
