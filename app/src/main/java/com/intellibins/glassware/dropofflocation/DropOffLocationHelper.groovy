@@ -7,7 +7,7 @@ import rx.Observable
  *
  * http://www.nyc.gov/html/nycwasteless/html/stuff/harmful_hh_prod_special_waste.shtml
  */
-class DropOffLocation implements IFindDropOff {
+class DropOffLocationHelper implements IFindDropOff {
 
     def name = "Household Special Waste Drop-Off Site"
 

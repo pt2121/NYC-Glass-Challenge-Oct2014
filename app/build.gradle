@@ -42,4 +42,5 @@ dependencies {
     compile 'com.github.prt2121:ProgressBar:1.0@aar'
     compile 'com.google.zxing:core:3.1.0'
     compile 'com.squareup.retrofit:retrofit:1.6.1'
+    compile 'de.greenrobot:eventbus:2.2.1'
 }

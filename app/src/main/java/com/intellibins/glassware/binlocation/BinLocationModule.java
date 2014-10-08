@@ -1,6 +1,6 @@
 package com.intellibins.glassware.binlocation;
 
-import com.intellibins.glassware.SplashScreenActivity;
+import com.intellibins.glassware.DataService;
 
 import android.app.Application;
 
@@ -14,7 +14,7 @@ import dagger.Provides;
  */
 @Module(
         complete = false,
-        injects = SplashScreenActivity.class,
+        injects = DataService.class,
         library = true
 )
 public class BinLocationModule {
