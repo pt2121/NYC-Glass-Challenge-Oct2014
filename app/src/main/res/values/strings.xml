@@ -6,6 +6,9 @@
     <string name="recycle_this">Recycle this</string>
     <string name="plastic">Plastic</string>
     <string name="paper">Paper</string>
+    <string name="glass">Glass</string>
+    <string name="metal">Metal</string>
+    <string name="special_waste">Special Waste</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_scanner">Scanner</string>
