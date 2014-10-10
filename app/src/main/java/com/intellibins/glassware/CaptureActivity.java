@@ -395,6 +395,7 @@ public final class CaptureActivity extends BaseGlassActivity implements
             switch (item.getItemId()) {
                 case R.id.plastic_menu_item:
                     startActivity(new Intent(this, ResultActivity.class));
+                    finish();
                     break;
                 case R.id.special_waste_menu_item:
                     break;

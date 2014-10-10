@@ -13,6 +13,8 @@ public class Loc {
 
     public final double longitude;
 
+    public String image;
+
     public Loc(String name, String address, double latitude, double longitude) {
         this.name = name;
         this.address = address;
@@ -29,6 +31,8 @@ public class Loc {
         private double latitude;
 
         private double longitude;
+
+        private String image;
 
         public Builder(String name) {
             this.name = name;
@@ -49,8 +53,15 @@ public class Loc {
             return this;
         }
 
+        public Builder image(String image) {
+            this.image = image;
+            return this;
+        }
+
         public Loc build() {
-            return new Loc(this.name, this.address, this.latitude, this.longitude);
+            Loc l = new Loc(this.name, this.address, this.latitude, this.longitude);
+            l.image = this.image;
+            return l;
         }
     }
 }

@@ -44,7 +44,7 @@ public class MenuActivity extends BaseGlassActivity {
         }
 
         ImageEvent imageEvent = EventBus.getDefault().removeStickyEvent(ImageEvent.class);
-        if(!TextUtils.isEmpty(imageEvent.filePath)) {
+        if (!TextUtils.isEmpty(imageEvent.filePath)) {
             Log.d(TAG, imageEvent.filePath);
         }
     }

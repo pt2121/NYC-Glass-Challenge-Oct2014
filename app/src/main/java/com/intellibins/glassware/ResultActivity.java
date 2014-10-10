@@ -8,8 +8,10 @@ import com.intellibins.glassware.model.Loc;
 import com.prt2121.glass.widget.SliderView;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,8 +72,6 @@ public class ResultActivity extends BaseGlassActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Loc l = mLocs.get(position);
-                Log.d(TAG, "location " + l.address);
-                Log.d(TAG, "lat : " + l.latitude + " , lng : " + l.longitude);
                 startNavigation(l.latitude, l.longitude);
             }
         });
@@ -87,10 +87,18 @@ public class ResultActivity extends BaseGlassActivity {
 
     private void createCards(List<Loc> locs) {
         for (Loc loc : locs) {
-            mCards.add(new CardBuilder(this, CardBuilder.Layout.COLUMNS)
+            String path = (TextUtils.isEmpty(loc.image)) ?
+                    "" :
+                    FileUtil.getCacheFilePath(this, loc.image);
+            CardBuilder builder = new CardBuilder(this, CardBuilder.Layout.COLUMNS)
                     .setText(loc.name)
-                    .setFootnote(loc.address)
-                    .addImage(R.drawable.bin_plastic));
+                    .setFootnote(loc.address);
+            if (TextUtils.isEmpty(path)) {
+                builder.addImage(R.drawable.bin_plastic);
+            } else {
+                builder.addImage(Drawable.createFromPath(path));
+            }
+            mCards.add(builder);
         }
     }
 
