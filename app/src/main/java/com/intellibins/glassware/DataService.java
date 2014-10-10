@@ -1,7 +1,6 @@
 package com.intellibins.glassware;
 
 import com.intellibins.glassware.binlocation.IFindBin;
-import com.intellibins.glassware.dropofflocation.IFindDropOff;
 import com.intellibins.glassware.model.Loc;
 import com.intellibins.glassware.storelocation.GooglePlaceService;
 import com.intellibins.glassware.storelocation.model.Photo;
@@ -150,13 +149,14 @@ public class DataService extends Service {
                         List<Photo> photo = result.getPhotos();
                         String ref = (photo != null && !photo.isEmpty()) ? photo.get(0)
                                 .getPhotoReference() : null;
-                        EventBus.getDefault().postSticky(new ImageEvent(getImage(ref)));
+                        //EventBus.getDefault().postSticky(new ImageEvent(getImage(ref)));
                         com.intellibins.glassware.storelocation.model.Location location = result
                                 .getGeometry().getLocation();
                         return new Loc.Builder(result.getName())
                                 .address(result.getVicinity())
                                 .latitude(location.getLat())
                                 .longitude(location.getLng())
+                                .image(getImage(ref))
                                 .build();
                     }
                 });
@@ -173,14 +173,13 @@ public class DataService extends Service {
 
         mSubscription = binLoc
                 .concatWith(storeLoc)
-//                .toSortedList() TODO
+//                .toSortedList() TODO need function
                 .toList()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Loc>>() {
                     @Override
                     public void call(List<Loc> locs) {
-                        Log.d(TAG, "DataEvent locs.size " + locs.size());
                         EventBus.getDefault().postSticky(new DataEvent(locs));
                         stopSelf();
                     }
