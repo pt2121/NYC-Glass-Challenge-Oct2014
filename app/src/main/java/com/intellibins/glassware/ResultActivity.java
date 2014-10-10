@@ -7,10 +7,14 @@ import com.google.android.glass.widget.CardScrollView;
 import com.intellibins.glassware.model.Loc;
 import com.prt2121.glass.widget.SliderView;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,8 @@ public class ResultActivity extends BaseGlassActivity {
     private static final String TAG = ResultActivity.class.getSimpleName();
 
     private List<CardBuilder> mCards = new ArrayList<CardBuilder>();
+
+    private List<Loc> mLocs = new ArrayList<Loc>();
 
     private CardScrollView mCardScrollView;
 
@@ -46,33 +52,37 @@ public class ResultActivity extends BaseGlassActivity {
         mCardScrollView.activate();
         setContentView(mCardScrollView);
 
-        // TODO
         DataEvent dataEvent = EventBus.getDefault().getStickyEvent(DataEvent.class);
         if (dataEvent != null && dataEvent.locs != null) {
             onEvent(dataEvent);
         } else {
             EventBus.getDefault().registerSticky(this);
         }
-
-//        ImageEvent imageEvent = EventBus.getDefault().removeStickyEvent(ImageEvent.class);
-//        if(!TextUtils.isEmpty(imageEvent.filePath)) {
-//            Log.d(TAG, imageEvent.filePath);
-//        }
-
-//        mCardScrollView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Log.d(TAG, "postion " + position);
-//            }
-//        });
-
     }
 
     public void onEvent(DataEvent event) {
         EventBus.getDefault().removeStickyEvent(DataEvent.class);
-        createCards(event.locs);
+        mLocs = event.locs;
+        createCards(mLocs);
         mAdapter = new ResultCardScrollAdapter();
         mCardScrollView.setAdapter(mAdapter);
+        mCardScrollView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Loc l = mLocs.get(position);
+                Log.d(TAG, "location " + l.address);
+                Log.d(TAG, "lat : " + l.latitude + " , lng : " + l.longitude);
+                startNavigation(l.latitude, l.longitude);
+            }
+        });
+    }
+
+    private void startNavigation(double lat, double lng) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setData(Uri.parse("google.navigation:mode=w&q=" + lat + "," + lng));
+        startActivity(intent);
+        finish();
     }
 
     private void createCards(List<Loc> locs) {
