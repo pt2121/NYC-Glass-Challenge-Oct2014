@@ -109,8 +109,9 @@ public class DataService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mUserLocation.stop();
-        mSubscription.unsubscribe();
+        // TODO
+//        mUserLocation.stop();
+//        mSubscription.unsubscribe();
     }
 
 
@@ -183,6 +184,11 @@ public class DataService extends Service {
                         EventBus.getDefault().postSticky(new DataEvent(locs));
                         stopSelf();
                     }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.v(TAG, throwable.toString());
+                    }
                 });
     }
 
@@ -221,7 +227,6 @@ public class DataService extends Service {
         FileOutputStream out = null;
         try {
             File file = File.createTempFile("store_image", ".jpg", context.getCacheDir());
-            Log.v(TAG, "file " + file.getAbsolutePath());
             out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.JPEG, 50, out);
             return file.getName();
