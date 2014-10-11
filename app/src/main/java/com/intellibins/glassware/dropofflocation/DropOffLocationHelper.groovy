@@ -7,11 +7,10 @@ import rx.Observable
  *
  * http://www.nyc.gov/html/nycwasteless/html/stuff/harmful_hh_prod_special_waste.shtml
  */
-class DropOffLocationHelper implements IFindDropOff {
+class DropOffLocationHelper {
 
     def name = "Household Special Waste Drop-Off Site"
 
-    @Override
     Observable<Loc> getLocs() {
         def locs = [new Loc(name, "Hunts Point Ave New York, NY 10474", 40.820948, -73.890549),
                     new Loc(name, "Gravesend New York, NY 11214", 40.591017, -73.977126),

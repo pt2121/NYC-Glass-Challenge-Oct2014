@@ -12,8 +12,9 @@ import rx.Observable
 import rx.Subscriber
 import rx.observables.StringObservable
 
-class NycBinLocationHelper implements IFindBin {
+class NycBinLocationHelper {
 
+    private String TAG = NycBinLocationHelper.class.getSimpleName()
     private Application mApp
 
     NycBinLocationHelper(Application app) {
@@ -37,6 +38,7 @@ class NycBinLocationHelper implements IFindBin {
                             .map({ byte[] bytes -> new String(bytes)
                     }))
         } catch (Exception e) {
+            Log.e(TAG, e.toString())
             Observable.empty()
         }
     }
@@ -56,7 +58,7 @@ class NycBinLocationHelper implements IFindBin {
                                     .build()
                             subscriber.onNext(bin)
                         } catch (Exception ex) {
-                            Log.e(NycBinLocationHelper.getSimpleName(), ex.toString())
+                            Log.e(TAG, ex.toString())
                         }
                     }
                     subscriber.onCompleted()
@@ -64,7 +66,6 @@ class NycBinLocationHelper implements IFindBin {
         } as Observable.OnSubscribe<Loc>)
     }
 
-    @Override
     Observable<Loc> getLocs() {
         getJsonText(mApp.getApplicationContext())
                 .flatMap({ String jsonText -> parseJson(jsonText) })
