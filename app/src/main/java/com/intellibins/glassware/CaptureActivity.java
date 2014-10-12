@@ -29,6 +29,7 @@ import com.github.barcodeeye.migrated.InactivityTimer;
 import com.github.barcodeeye.scan.CaptureActivityHandler;
 import com.github.barcodeeye.scan.ui.ViewfinderView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -68,12 +69,6 @@ public final class CaptureActivity extends BaseGlassActivity implements
     public static final String ITEM_PAPER = "ITEM_PAPER";
 
     public static final String ITEM_PLASTIC = "ITEM_PLASTIC";
-
-    public static final String BIN_TYPE = "BIN_TYPE";
-
-    public static final String BIN_PAPER = "BIN_PAPER";
-
-    public static final String BIN_PLASTIC = "BIN_PLASTIC";
 
     private static final String IMAGE_PREFIX = "BarcodeEye_";
 
@@ -308,20 +303,7 @@ public final class CaptureActivity extends BaseGlassActivity implements
     // Put up our own UI for how to handle the decoded contents.
     private void handleDecodeInternally(Result rawResult, Bitmap barcode) {
         String text = rawResult.getText();
-        Log.v(TAG, "text " + text);
-        // TODO
-//        if(text.toLowerCase().contains("bin")) {
-//            Intent intent = new Intent(this, BinActivity.class);
-//            intent.putExtra(BIN_TYPE, text);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//        } else {
-//            Intent intent = new Intent(this, ItemActivity.class);
-//            intent.putExtra(ITEM_TYPE, text);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//        }
-        finish();
+        startResultActivity(text);
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
@@ -394,8 +376,10 @@ public final class CaptureActivity extends BaseGlassActivity implements
                 featureId == Window.FEATURE_OPTIONS_PANEL) {
             switch (item.getItemId()) {
                 case R.id.plastic_menu_item:
-                    startActivity(new Intent(this, ResultActivity.class));
-                    finish();
+                    startResultActivity(ITEM_PLASTIC);
+                    break;
+                case R.id.paper_menu_item:
+                    startResultActivity(ITEM_PAPER);
                     break;
                 case R.id.special_waste_menu_item:
                     break;
@@ -405,5 +389,17 @@ public final class CaptureActivity extends BaseGlassActivity implements
             return true;
         }
         return super.onMenuItemSelected(featureId, item);
+    }
+
+    private void startResultActivity(final String itemType) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(CaptureActivity.this, ResultActivity.class);
+                intent.putExtra(ITEM_TYPE, itemType);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }

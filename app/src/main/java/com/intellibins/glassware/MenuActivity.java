@@ -16,6 +16,7 @@ import android.view.Window;
 
 import de.greenrobot.event.EventBus;
 
+//unused
 public class MenuActivity extends BaseGlassActivity {
 
     private static final String TAG = MenuActivity.class.getSimpleName();
