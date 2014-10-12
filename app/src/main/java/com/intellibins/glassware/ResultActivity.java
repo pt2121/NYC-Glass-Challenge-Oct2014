@@ -1,5 +1,6 @@
 package com.intellibins.glassware;
 
+import com.google.android.glass.media.Sounds;
 import com.google.android.glass.widget.CardBuilder;
 import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
@@ -7,12 +8,13 @@ import com.google.android.glass.widget.CardScrollView;
 import com.intellibins.glassware.model.Loc;
 import com.prt2121.glass.widget.SliderView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,9 +42,19 @@ public class ResultActivity extends BaseGlassActivity {
 
     private View mContentView;
 
+    private int mDrawable = R.drawable.bin_plastic;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            String type = intent.getStringExtra(CaptureActivity.ITEM_TYPE);
+            if (type.equalsIgnoreCase(CaptureActivity.ITEM_PAPER)) {
+                mDrawable = R.drawable.bin_paper;
+            }
+        }
 
         mContentView = LayoutInflater.from(ResultActivity.this).inflate(R.layout.activity_loading,
                 null);
@@ -71,6 +83,8 @@ public class ResultActivity extends BaseGlassActivity {
         mCardScrollView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                audio.playSoundEffect(Sounds.TAP);
                 Loc l = mLocs.get(position);
                 startNavigation(l.latitude, l.longitude);
             }
@@ -94,7 +108,7 @@ public class ResultActivity extends BaseGlassActivity {
                     .setText(loc.name)
                     .setFootnote(loc.address);
             if (TextUtils.isEmpty(path)) {
-                builder.addImage(R.drawable.bin_plastic);
+                builder.addImage(mDrawable);
             } else {
                 builder.addImage(Drawable.createFromPath(path));
             }
