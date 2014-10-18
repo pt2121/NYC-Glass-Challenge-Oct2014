@@ -44,6 +44,10 @@ public class BaseGlassActivity extends Activity {
         return false;
     }
 
+    protected boolean onSwipeDown() {
+        return false;
+    }
+
     private GestureDetector createGestureDetector(Context context) {
         GestureDetector gestureDetector = new GestureDetector(context);
 
@@ -58,6 +62,8 @@ public class BaseGlassActivity extends Activity {
                     return onSwipeRight();
                 } else if (gesture == Gesture.SWIPE_LEFT) {
                     return onSwipeLeft();
+                } else if (gesture == Gesture.SWIPE_DOWN) {
+                    return onSwipeDown();
                 }
                 return false;
             }

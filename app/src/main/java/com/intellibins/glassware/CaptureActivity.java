@@ -13,6 +13,7 @@
 
 package com.intellibins.glassware;
 
+import com.google.android.glass.media.Sounds;
 import com.google.android.glass.view.WindowUtils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
@@ -35,6 +36,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -229,6 +231,8 @@ public final class CaptureActivity extends BaseGlassActivity implements
 
     @Override
     protected boolean onTap() {
+        AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audio.playSoundEffect(Sounds.TAP);
         openOptionsMenu();
         return super.onTap();
     }
@@ -304,14 +308,16 @@ public final class CaptureActivity extends BaseGlassActivity implements
     // Put up our own UI for how to handle the decoded contents.
     private void handleDecodeInternally(Result rawResult, Bitmap barcode) {
         String text = rawResult.getText().toLowerCase();
+        Log.v(TAG, "handleDecodeInternally text " + text);
         if(ITEM_METAL_GLASS_PLASTIC.toLowerCase().contains(text)) {
             startResultActivity(ITEM_METAL_GLASS_PLASTIC);
         } else if(ITEM_PAPER.toLowerCase().contains(text)) {
             startResultActivity(ITEM_PAPER);
         } else if(ITEM_SPECIAL_WASTE.toLowerCase().contains(text)) {
             startResultActivity(ITEM_SPECIAL_WASTE);
+        } else {
+            startResultActivity(text);
         }
-        startResultActivity(text);
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
