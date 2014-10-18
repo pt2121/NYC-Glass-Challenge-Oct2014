@@ -1,1 +1,3 @@
-<trigger keyword="@string/recycle_this" />
+<trigger keyword="@string/recycle_this">
+    <constraints network="true" />
+</trigger>
