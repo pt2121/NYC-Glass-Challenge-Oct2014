@@ -11,7 +11,7 @@ This repo is a redo version of https://github.com/intellibins/intellibins.
 * User location module is added.
 * Follow Glass design guidelines : sound, card, tuggable view.
 * UI changed.
-* Hopefully, the code will be more oganized and readable.
+* Hopefully, the code is more oganized and readable.
 
 **To improve our code base, we also adopt cutting-edge technologies and awesome open source libraries:** 
 * [RxJava (Reactive)](https://github.com/ReactiveX/RxJava)
