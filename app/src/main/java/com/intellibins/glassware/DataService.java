@@ -1,6 +1,7 @@
 package com.intellibins.glassware;
 
 import com.intellibins.glassware.binlocation.IFindBin;
+import com.intellibins.glassware.dropofflocation.IFindDropOff;
 import com.intellibins.glassware.model.Loc;
 import com.intellibins.glassware.storelocation.GooglePlaceService;
 import com.intellibins.glassware.storelocation.model.Photo;
@@ -40,14 +41,16 @@ public class DataService extends Service {
 
     private static final String TAG = DataService.class.getSimpleName();
 
+    private static final int MAX_LOCATION = 2;
+
     @Inject
     IFindBin mBinLocation;
 
     @Inject
     IUserLocation mUserLocation;
 
-//    @Inject
-//    IFindDropOff mDropOffLocation;
+    @Inject
+    IFindDropOff mDropOffLocation;
 
     @Inject
     RestAdapter mRestAdapter;
@@ -64,16 +67,16 @@ public class DataService extends Service {
         }
     };
 
-//    Func1<Location, Observable<List<Loc>>> findClosestDropOffs
-//            = new Func1<Location, Observable<List<Loc>>>() {
-//        @Override
-//        public Observable<List<Loc>> call(Location location) {
-//            return mDropOffLocation.getLocs()
-//                    .toSortedList(
-//                            new LocUtils()
-//                                    .compare(location.getLatitude(), location.getLongitude()));
-//        }
-//    };
+    Func1<Location, Observable<List<Loc>>> findClosestDropOffs
+            = new Func1<Location, Observable<List<Loc>>>() {
+        @Override
+        public Observable<List<Loc>> call(Location location) {
+            return mDropOffLocation.getLocs()
+                    .toSortedList(
+                            new LocUtils()
+                                    .compare(location.getLatitude(), location.getLongitude()));
+        }
+    };
 
     private Subscription mSubscription;
 
@@ -84,13 +87,6 @@ public class DataService extends Service {
     public IBinder onBind(Intent intent) {
         throw new UnsupportedOperationException("Not yet implemented!");
     }
-
-    // TODO
-//    10-07 00:37:00.219    3264-3264/com.intellibins.glassware V/IntellibinsApp﹕ skip 1
-//            10-07 00:37:00.243    3264-3264/com.intellibins.glassware V/IntellibinsApp﹕ skip 2
-//            10-07 00:37:01.563    3264-3264/com.intellibins.glassware I/Choreographer﹕ Skipped 70 frames!  The application may be doing too much work on its main thread.
-//            10-07 00:40:14.805    3443-3443/com.intellibins.glassware I/Choreographer﹕ Skipped 80 frames!  The application may be doing too much work on its main thread.
-
 
     @Override
     public void onCreate() {
@@ -109,9 +105,8 @@ public class DataService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // TODO
-//        mUserLocation.stop();
-//        mSubscription.unsubscribe();
+        mUserLocation.stop();
+        mSubscription.unsubscribe();
     }
 
 
@@ -119,17 +114,18 @@ public class DataService extends Service {
         Observable<Location> userLocation = mUserLocation.observe()
                 .take(1);
 
-//        userLocation.flatMap(findClosestDropOffs)
-//                .subscribeOn(Schedulers.newThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Action1<List<Loc>>() {
-//                    @Override
-//                    public void call(List<Loc> locs) {
-//                        for (Loc loc : locs) {
-//                            Log.d(TAG, "drop-off : " + loc.address);
-//                        }
-//                    }
-//                });
+        userLocation.flatMap(findClosestDropOffs)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<Loc>>() {
+                    @Override
+                    public void call(List<Loc> locs) {
+                        EventBus.getDefault().postSticky(locs.get(0));
+                        for (Loc loc : locs) {
+                            Log.d(TAG, "drop-off : " + loc.address);
+                        }
+                    }
+                });
 
         Observable<Loc> storeLoc = userLocation.flatMap(new Func1<Location, Observable<Place>>() {
             @Override
@@ -170,7 +166,7 @@ public class DataService extends Service {
                         return Observable.from(locs);
                     }
                 })
-                .take(5);
+                .take(MAX_LOCATION);
 
         mSubscription = binLoc
                 .concatWith(storeLoc)

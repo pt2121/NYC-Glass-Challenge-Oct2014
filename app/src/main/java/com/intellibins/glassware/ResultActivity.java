@@ -30,7 +30,7 @@ import de.greenrobot.event.EventBus;
  */
 public class ResultActivity extends BaseGlassActivity {
 
-    private static final String TAG = ResultActivity.class.getSimpleName();
+//    private static final String TAG = ResultActivity.class.getSimpleName();
 
     private List<CardBuilder> mCards = new ArrayList<CardBuilder>();
 
@@ -42,22 +42,13 @@ public class ResultActivity extends BaseGlassActivity {
 
     private View mContentView;
 
-    private int mDrawable = R.drawable.bin_plastic;
+    private int mDrawable = R.drawable.bin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Intent intent = getIntent();
-        if (intent != null) {
-            String type = intent.getStringExtra(CaptureActivity.ITEM_TYPE);
-            if (type.equalsIgnoreCase(CaptureActivity.ITEM_PAPER)) {
-                mDrawable = R.drawable.bin_paper;
-            }
-        }
-
-        mContentView = LayoutInflater.from(ResultActivity.this).inflate(R.layout.activity_loading,
-                null);
+        mContentView = LayoutInflater.from(ResultActivity.this)
+                .inflate(R.layout.activity_loading, null);
         mCardScrollView = new CardScrollView(this);
         mCardScrollView.setAdapter(new SingleCardAdapter());
         SliderView slider = (SliderView) mContentView.findViewById(R.id.progressBar);
@@ -66,6 +57,25 @@ public class ResultActivity extends BaseGlassActivity {
         mCardScrollView.activate();
         setContentView(mCardScrollView);
 
+        Intent intent = getIntent();
+        if (intent != null) {
+            String type = intent.getStringExtra(CaptureActivity.ITEM_TYPE);
+            if (type.equalsIgnoreCase(CaptureActivity.ITEM_PAPER)) {
+                mDrawable = R.drawable.bin_paper;
+                checkDataEvent();
+            } else if (type.equalsIgnoreCase(CaptureActivity.ITEM_METAL_GLASS_PLASTIC)) {
+                mDrawable = R.drawable.bin_metal_glass_plastic;
+                checkDataEvent();
+            } else if (type.equalsIgnoreCase(CaptureActivity.ITEM_SPECIAL_WASTE)) {
+                mDrawable = R.drawable.bin_special_waste;
+                Loc dropOff = EventBus.getDefault().removeStickyEvent(Loc.class);
+                mLocs.add(dropOff);
+                setupUi(mLocs);
+            }
+        }
+    }
+
+    public void checkDataEvent() {
         DataEvent dataEvent = EventBus.getDefault().getStickyEvent(DataEvent.class);
         if (dataEvent != null && dataEvent.locs != null) {
             onEvent(dataEvent);
@@ -77,7 +87,11 @@ public class ResultActivity extends BaseGlassActivity {
     public void onEvent(DataEvent event) {
         EventBus.getDefault().removeStickyEvent(DataEvent.class);
         mLocs = event.locs;
-        createCards(mLocs);
+        setupUi(mLocs);
+    }
+
+    private void setupUi(List<Loc> locs) {
+        createCards(locs);
         mAdapter = new ResultCardScrollAdapter();
         mCardScrollView.setAdapter(mAdapter);
         mCardScrollView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

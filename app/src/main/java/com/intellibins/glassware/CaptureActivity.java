@@ -29,7 +29,6 @@ import com.github.barcodeeye.migrated.InactivityTimer;
 import com.github.barcodeeye.scan.CaptureActivityHandler;
 import com.github.barcodeeye.scan.ui.ViewfinderView;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -68,7 +67,9 @@ public final class CaptureActivity extends BaseGlassActivity implements
 
     public static final String ITEM_PAPER = "ITEM_PAPER";
 
-    public static final String ITEM_PLASTIC = "ITEM_PLASTIC";
+    public static final String ITEM_METAL_GLASS_PLASTIC = "ITEM_METAL_GLASS_PLASTIC";
+
+    public static final String ITEM_SPECIAL_WASTE = "ITEM_SPECIAL_WASTE";
 
     private static final String IMAGE_PREFIX = "BarcodeEye_";
 
@@ -302,7 +303,14 @@ public final class CaptureActivity extends BaseGlassActivity implements
     // TODO UI
     // Put up our own UI for how to handle the decoded contents.
     private void handleDecodeInternally(Result rawResult, Bitmap barcode) {
-        String text = rawResult.getText();
+        String text = rawResult.getText().toLowerCase();
+        if(ITEM_METAL_GLASS_PLASTIC.toLowerCase().contains(text)) {
+            startResultActivity(ITEM_METAL_GLASS_PLASTIC);
+        } else if(ITEM_PAPER.toLowerCase().contains(text)) {
+            startResultActivity(ITEM_PAPER);
+        } else if(ITEM_SPECIAL_WASTE.toLowerCase().contains(text)) {
+            startResultActivity(ITEM_SPECIAL_WASTE);
+        }
         startResultActivity(text);
     }
 
@@ -376,12 +384,19 @@ public final class CaptureActivity extends BaseGlassActivity implements
                 featureId == Window.FEATURE_OPTIONS_PANEL) {
             switch (item.getItemId()) {
                 case R.id.plastic_menu_item:
-                    startResultActivity(ITEM_PLASTIC);
+                    startResultActivity(ITEM_METAL_GLASS_PLASTIC);
+                    break;
+                case R.id.metal_menu_item:
+                    startResultActivity(ITEM_METAL_GLASS_PLASTIC);
+                    break;
+                case R.id.glass_menu_item:
+                    startResultActivity(ITEM_METAL_GLASS_PLASTIC);
                     break;
                 case R.id.paper_menu_item:
                     startResultActivity(ITEM_PAPER);
                     break;
                 case R.id.special_waste_menu_item:
+                    startResultActivity(ITEM_SPECIAL_WASTE);
                     break;
                 default:
                     return true;
